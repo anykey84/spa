@@ -1,0 +1,22 @@
+﻿<div>
+
+    <div ng-show="processing['loadRoles']
+                || processing['loadCurrentOffice']">
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+    </div>
+
+    <div ng-show="!processing['loadRoles']
+                && !processing['loadCurrentOffice']">
+
+        <div ng-show="visibleselectoffice">
+            <my-office-select />
+        </div>
+
+        <ng-include src="contactInfoAllPanelUrl">
+        </ng-include>
+
+    </div>
+
+</div>

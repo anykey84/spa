@@ -1,0 +1,73 @@
+﻿<div ng-init="visibleBank = false">
+
+    
+
+    <button class="btn btn-default btn-block" ng-show="!visibleBank" ng-click="visibleBank = !visibleBank"><span class="glyphicon glyphicon-credit-card"></span>&nbsp;
+        Добавить безналичный платежный ордер
+    </button>
+
+    <div class="panel panel-primary" ng-show="visibleBank">
+        <div class="panel-heading">
+            Добавление безналичного платежного ордера
+        </div>
+        <div class="panel-body">
+            <div ng-show="processing['addPayment']
+               || processing['delStatus']
+               || processing['loadStatuses']">
+
+                <my-progressbar message="{{message}}"
+                                visible="true"
+                                typebar="line" />
+                <br />
+            </div>
+
+            <div>
+                <my-servermessages messages="messages" />
+            </div>
+
+            <div>
+                <div>
+                    <div>
+                        <form novalidate>
+                            <div class="form-group">
+                                <label for="contractNumber"
+                                       class="control-label">Введите номер договора</label>
+                                    <input type="text" ng-model="contractNumber"
+                                           class="form-control" id="idcontractNumber" />
+                            </div>
+                        </form>
+
+                        <button class="btn btn-primary btn-sm" ng-click="checkContract()">Получить информацию по номеру договора</button>
+                        <br />
+                        <h3 ng-show="contractNumberIsCorrect">Владелец займа - {{ownerContractFullName}}</h3>
+                        <h3 ng-show="!contractNumberIsCorrect && contractNumber">Займ не найден в системе - ошибка ввода!</h3>
+                    </div>
+
+                    <form novalidate>
+                        <div class="form-group">
+                            <label for="idbank"
+                                   class="control-label">Выберите банк</label>
+                                <select ng-model="selected"
+                                        ng-options="item as item.name for item in banks"
+                                        class="form-control" id="idbank" />
+                        </div>
+                        <div class="form-group">
+                            <label for="iddatePay"
+                                   class="control-label">Дата платежа</label>
+                                <input type="date" ng-model="datePay"
+                                       class="form-control" id="iddatePay" />
+                        </div>
+                        <div class="form-group">
+                            <label for="iddatePaysum"
+                                   class="control-label">Сумма платежа</label>
+                                <input type="number" ng-model="sum"
+                                       class="form-control" id="iddatePaysum" step="1000" min="0" />
+                        </div>
+                        <button class="btn btn-danger" ng-click="visibleBank = !visibleBank">Отмена</button>
+                        <button class="btn btn-success" ng-click="addPayment(); visibleBank = !visibleBank;">Создать</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

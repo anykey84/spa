@@ -1,0 +1,8 @@
+﻿<div>
+
+    <h1 ng-show="!personinfo.isJuridical">ФИО: {{personinfo.lastName}} {{personinfo.firstName}} {{personinfo.middleName}}</h1>
+    <h2 ng-show="!personinfo.isJuridical">дата рождения: {{personinfo.dateBirth | date:'dd.MM.yyyy'}}</h2>
+
+    <h2 ng-show="personinfo.isJuridical">Наименование {{personinfo.name}}, ИНН {{personinfo.inn}}, ОГРН {{personinfo.ogrn}}</h2>
+
+</div>

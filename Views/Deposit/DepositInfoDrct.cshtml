@@ -1,0 +1,417 @@
+﻿<div>
+    <legend>сведения о вкладе</legend>
+
+    <div ng-show="processing['calcDepositEarly']
+                || processing['loadDepositInfo']
+                || processing['payInterest']
+                || processing['depositProlongation']
+                || processing['depositReturn']
+                || processing['depositEarlyApply']
+                || processing['depositCapitalization']
+                || processing['depositCapitalizationCalc']
+                || processing['getSchedule']">
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+        <br />
+    </div>
+
+    <div>
+        <my-servermessages messages="messages" />
+    </div>
+
+
+    <div ng-show="!processing['calcDepositEarly']
+                && !processing['loadDepositInfo']
+                && !processing['payInterest']
+                && !processing['depositProlongation']
+                && !processing['depositReturn']
+                && !processing['depositEarlyApply']
+                && !processing['depositCapitalization']
+                && !processing['depositCapitalizationCalc']
+                && !processing['getSchedule']">
+
+        <h3>продукт: {{depositInfoMain.productName}}</h3>
+
+        <table ng-init="rows = 6;"
+               class="table table-striped table-condensed table-hover">
+
+            <tbody>
+                <tr>
+                    <td colspan="6"><b>проценты</b></td>
+                </tr>
+
+                <tr>
+                    <td> </td>
+                    <td><b>%</b></td>
+                    <td><b>НДФЛ</b></td>
+                    <td><b>сумма вклада</b></td>
+                    <td><b> </b></td>
+                    <td><b> </b></td>
+                </tr>
+
+                <tr>
+                    <td> </td>
+                    <td>{{depositInfo.diffInterest | number:2}}</td>
+                    <td>{{depositInfo.diffNdfl | number:2}}</td>
+                    <td>{{depositInfo.diffRest | number:2}}</td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+
+                @*<tr>
+                        <td> </td>
+                        <td><b>всего начислено %</b></td>
+                        <td><b>по графику</b></td>
+                        <td><b>по дням</b></td>
+                        <td><b>выплачено</b></td>
+                        <td><b>остаток</b></td>
+                    </tr>
+
+                    <tr>
+                        <td> </td>
+                        <td>{{depositInfo.interestAll | number:2}}</td>
+                        <td>{{depositInfo.interestSchedule | number:2}}</td>
+                        <td>{{depositInfo.interestDay | number:2}}</td>
+                        <td>{{depositInfo.interestSchedulePay | number:2}}</td>
+                        <td>{{depositInfo.interestLeft | number:2}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="{{rows}}"> </td>
+                    </tr>
+                    <tr>
+                        <td>НДФЛ</td>
+                        <td colspan="2">{{depositInfo.contractInterest | number:2}}% - ({{depositInfo.interestRef | number:2}}% + {{depositInfo.interestConst | number:2}}%) = {{depositInfo.interestNDFL | number:2}}%</td>
+                        <td colspan="3">{{depositInfo.interestLeft | number:2}} / {{depositInfo.contractInterest | number:2}}% * {{depositInfo.interestNDFL | number:2}}% * 35% = {{depositInfo.ndfl | number:2}} руб.</td>
+                    </tr>*@
+
+
+
+                <!--долг досрочное изьятие-->
+                @*<tr>
+                        <td colspan="{{rows}}"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="{{rows}}"><b>долг за досрочное изьятие вклада: {{depositInfo.penaltyEarlyDebt}} рублей</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="{{rows}}"> </td>
+                    </tr>*@
+                <!--долг досрочное изьятие-->
+                @*<tr>
+                        <td colspan="{{rows}}"><b>выплата процентов по графику</b> <b ng-show="depositInfo.interestLeft == 0">: НЕТ НАЧИСЛЕННЫХ ПРОЦЕНТОВ ПО ГРАФИКУ</b> </td>
+                    </tr>*@
+
+                @*<tr>
+                        <td colspan="{{rows}}"></td>
+                    </tr>*@
+
+                @*<tr ng-show="depositInfo.interestLeft != 0">
+                        <td>сумма процентов для выплаты клиенту</td>
+                        <td>
+                            <input type="text" value="{{(depositInfo.interestLeft - depositInfo.ndfl - depositInfo.penaltyEarlyDebt) | number:2}}" ng-disabled="true" />
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm"
+                                    ng-click="payInterest();">
+                                выполнить выплату процентов
+                            </button>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>*@
+
+                <tr>
+                    <td colspan="{{rows}}"> </td>
+                </tr>
+
+                <tr>
+                    <td colspan="{{rows}}"><b>ЧАСТИЧНЫЙ досрочный возврат вклада</b></td>
+                </tr>
+                <tr>
+                    <td>введите сумму (под минимальный процент <checkbox ng-model="isMin" />)</td>
+                    @*<td>введите сумму</td>*@
+                    <td>
+                        <input class="form-control" type="text" ng-model="sumEarly" />
+                    </td>
+
+                    <td>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="idbank"
+                                       class="col-sm-4 control-label">выберите банк</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="bankDepositEarlyApply"
+                                            ng-options="item as item.name for item in banks"
+                                            class="form-control" id="idbank" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        введите дату
+                    </td>
+                    <td>
+                        <input class="form-control" type="date" ng-model="dateEarly" />
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm btn-block"
+                                ng-click="depositEarlyApply();">
+                            возврат вклада
+                        </button>
+                    </td>
+                </tr>
+
+                @* <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm btn-block"
+                                    ng-click="calcDepositEarly();">
+                                расчитать возврат вклада
+                            </button>
+                        </td>
+                        <td colspan="2">
+                            потери {{penaltySum}} руб.
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm btn-block"
+                                    ng-click="depositEarlyApply();">
+                                возврат вклада
+                            </button>
+                        </td>
+                    </tr>*@
+
+
+
+                <!--капитализация-->
+                <tr>
+                    <td colspan="{{rows}}"> </td>
+                </tr>
+                <tr>
+                    <td colspan="{{rows}}"><b>капитализация</b></td>
+                </tr>
+                <tr>
+                    <td>введите дату</td>
+                    <td>
+                        <input class="form-control" type="date" ng-model="dateCap" />
+                    </td>
+
+                    <td>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="idbank"
+                                       class="col-sm-4 control-label">выберите банк</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="bankDepositCapitalization"
+                                            ng-options="item as item.name for item in banks"
+                                            class="form-control" id="idbank" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <button class="btn btn-primary btn-sm btn-block"
+                                ng-click="depositCapitalizationCalc();">
+                            рассчитать
+                        </button>
+                    </td>
+                    <td> сумма {{sumCap | number:2}} руб.</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm btn-block"
+                                ng-click="depositCapitalization();">
+                            капитализация
+                        </button>
+                    </td>
+                </tr>
+                <!--капитализация-->
+                <!--пролонгация-->
+                <tr>
+                    <td colspan="{{rows}}"> </td>
+                </tr>
+                <tr>
+                    <td colspan="{{rows}}"><b>пролонгация</b></td>
+                </tr>
+                <tr>
+                    <td>введите кол-во дней </td>
+                    <td>
+                        <input type="number" class="form-control" ng-model="periodProl" />
+                    </td>
+                    @*<td>введите сумму</td>
+                        <td>
+                            <input type="number" class="form-control" ng-model="sumProl" />
+                        </td>*@
+                    <td></td>
+                    <td>
+                        @*введите дату*@
+                    </td>
+                    <td>
+                        @*<input class="form-control" type="date" ng-model="dateProlongation" />*@
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm btn-block"
+                                ng-click="depositProlongation();">
+                            пролонгация
+                        </button>
+                    </td>
+                </tr>
+                <!--пролонгация-->
+                <!--пополнение вклада-->
+                <tr>
+                    <td colspan="{{rows}}"> </td>
+                </tr>
+                <tr>
+                    <td colspan="{{rows}}"><b>пополнение вклада</b></td>
+                </tr>
+                <tr>
+                    <td>введите сумму  </td>
+                    <td>
+                        <input class="form-control" type="text" ng-model="sumRefill" />
+                    </td>
+
+                    <td>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="idbank"
+                                       class="col-sm-4 control-label">выберите банк</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="bankDepositSumRefill"
+                                            ng-options="item as item.name for item in banks"
+                                            class="form-control" id="idbank" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        введите дату
+                    </td>
+                    <td colspan="1">
+                        <input class="form-control" type="date" ng-model="dateRefill" />
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm btn-block"
+                                ng-click="depositSumRefill();">
+                            пополнение
+                        </button>
+                    </td>
+                </tr>
+                <!--пополнение вклада-->
+                <!--полный возврат вклада с закрытием-->
+                <tr>
+                    <td colspan="{{rows}}"> </td>
+                </tr>
+                <tr>
+                    <td colspan="{{rows}}"><b>полный возврат вклада с закрытием</b></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="idbank"
+                                       class="col-sm-4 control-label">выберите банк</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="bankDepositReturn"
+                                            ng-options="item as item.name for item in banks"
+                                            class="form-control" id="idbank" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm btn-block"
+                                ng-click="depositReturn();">
+                            полный возврат вклада с закрытием
+                        </button>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <!--полный возврат вклада с закрытием-->
+            </tbody>
+        </table>
+
+        <legend>график выплаты процентов</legend>
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+            <th>дата</th>
+            @*<th>платеж</th>*@
+            @*<th>основной долг</th>*@
+            <th>процент</th>
+            <th>НДФЛ</th>
+            <th>итого к выплате</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in schedule | orderBy : 'datePay'">
+                    <td>{{item.datePay | date:'dd.MM.yyyy'}}</td>
+                    @*<td>{{item.sumDebt + item.sumInterest | number:2}}</td>*@
+                    @*<td>{{item.sumDebt | number:2}}</td>*@
+                    <td>
+                        {{item.sumInterest | number:2}}
+                    </td>
+                    <td>
+                        {{item.ndfl | number:2}}
+                    </td>
+                    <td>
+                        {{item.sumInterest - item.ndfl | number:2}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> <b>итого</b> </td>
+                    <td> <b>{{totalInterest | number:2}}</b> </td>
+                    <td> <b>{{totalNdfl | number:2}}</b> </td>
+                    <td> <b>{{totalAll | number:2}}</b> </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">детализация по начисленным процентам</div>
+            <div class="panel-body">
+                <button class="btn btn-primary btn-sm"
+                        ng-init="isVisibleHelpAccount = false;"
+                        ng-click="isVisibleHelpAccount = !isVisibleHelpAccount;">
+                    <div ng-show="!isVisibleHelpAccount">
+                        развернуть
+                    </div>
+                    <div ng-show="isVisibleHelpAccount">
+                        свернуть
+                    </div>
+                </button>
+
+                <div ng-show="isVisibleHelpAccount">
+                    <table class="table borderless">
+                        <thead>
+                        <th>дата</th>
+                        <th>сумма</th>
+                        <th>ндфл</th>
+                        <th>ставка рефинансирования</th>
+                        <th>сумма остатка по вкладу</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in depositInfoPart">
+                                <td>{{item.dateTo | dateFormat1}}</td>
+                                <td>{{item.sum | number:2}}</td>
+                                <td>{{item.ndfl | number:2}}</td>
+                                <td>{{item.interestRef | number:2}}</td>
+                                <td>{{item.sumDebt | number:2}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

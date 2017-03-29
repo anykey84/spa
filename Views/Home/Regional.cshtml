@@ -1,0 +1,113 @@
+﻿<div class="regional-tab">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Региональный менеджер</h1>
+        </div>
+        <div class="col-md-6"><my-alert-messages isload="true" /></div>
+    </div>
+    <uib-tabset active="active">
+        <uib-tab index="0" heading="Доступные сотрудники" select="regionalCtrl.getProfiles()">
+                <table class="table table-striped table-hover" ng-show="regionalCtrl.profiles.length">
+                    <thead>
+                        <tr>
+                            <th>Сотрудник</th>
+                            <th>Активен</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="profile in regionalCtrl.profiles">
+                            <td>{{profile.lastName}} {{profile.firstName}} {{profile.middleName}}</td>
+                            <td>
+                                <span ng-show="profile.active" class="label label-primary">Профиль активен</span>
+                                <span ng-show="!profile.active" class="label label-default">Профиль неактивен</span>
+                            </td>
+                            <td>
+                                <div class="checkbox">
+                                    <label>
+                                        <button ng-show="profile.active" class="btn btn-warning" ng-click="regionalCtrl.updatePersonInWorkStatus(profile)">Деактивировать</button>
+                                        <button ng-show="!profile.active" class="btn btn-success" ng-click="regionalCtrl.updatePersonInWorkStatus(profile)">Активировать</button>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        </uib-tab>
+        <uib-tab index="1" heading="Переназначение задач" select="regionalCtrl.getTasks()">
+                    <div ng-show="processing['loadPersonsProfileInWorkOnOffice']
+                    || processing['loadContractsProfileInWorkOnOffice']
+                    || processing['loadPersonsProfileInWorkOnOffice']
+                    || processing['loadPersonsProfileInWorkOnOffice']">
+
+                        <my-progressbar message="{{message}}"
+                                        visible="true"
+                                        typebar="line" />
+
+                    </div>
+
+                    <div ng-show="!processing['loadPersonsProfileInWork']
+                    && !processing['loadContractsProfileInWork']
+                    && !processing['loadPersonsProfileInWork']
+                    && !processing['loadPersonsProfileInWork']">
+
+
+                        <h3>Задачи</h3>
+
+
+                        <table ng-show="regionalCtrl.tasks.length" class="table">
+                            <thead>
+
+                            <th>Специалист</th>
+                            <th>Физ. лицо</th>
+                            <th>Дата</th>
+                            <th>Задача</th>
+                            <th class="route-task-cell">Переназначение</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in regionalCtrl.tasks | orderBy: 'datePlanned' : true">
+                                    <!--ng-class="{'warning': task.status == 'Hold' , 'success': task.status == 'Completed', 'active': task.status == 'Started', 'danger': item.dateCreateFirstResult == null } ">-->
+                                    <td>{{item.worker}}</td>
+                                    <td>
+                                        <a href="#/Person/Info/{{item.id_Person}}">{{item.person}}</a>
+                                    </td>
+
+                                    <td>
+                                        {{item.datePlanned | dateFormatLong}}
+                                        <br />
+                                        {{regionalCtrl.dateDiff(item.datePlanned, item.datePlanned.dateCreate)}}
+                                    </td>
+
+                                    <td>
+                                        <b>{{item.name}}</b>
+                                        <br />
+                                        описание: {{item.description}}
+                                    </td>
+                                    <td class="route-task-cell">
+                                        <div class="form-group">
+                                            <select class="form-control" ng-model="item.newWorkerId">
+                                                @*<option selected disabled>Выберите сотрудника</option>*@
+                                                <option ng-repeat="profile in regionalCtrl.profiles" value="{{profile.id}}">{{profile.lastName}} {{profile.firstName}} {{profile.middleName}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-xs-8">
+                                                    <input type="date" ng-model="item.newTaskDate" ng-init="Date.now()" />
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <button class="btn btn-primary btn-block btn-xs" ng-click="regionalCtrl.updateTaskWorker(item)">Ok</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        
+                    </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

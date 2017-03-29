@@ -1,0 +1,356 @@
+﻿<div>
+    <div>
+        <my-servermessages messages="messages" />
+    </div>
+
+    <div ng-show="processing['getPersonInputStream']
+                || processing['getOfficeRegions']
+                || processing['addPersonInputStream']
+                || processing['getTaskTypesByType']
+                || processing['getProductServices']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="Leonardo" />
+        <br />
+    </div>
+
+
+    <div ng-show="!processing['getPersonInputStream']
+                && !processing['getOfficeRegions']
+                && !processing['addPersonInputStream']
+                && !processing['getTaskTypesByType']
+                && !processing['getProductServices']">
+
+        <div>
+            <div class="panel panel-primary" ng-show="!formAddPersonVisible">
+                <div class="panel-heading">Поиск юридического лица</div>
+                <div class="panel-body">
+                    <form ng-submit="getPersonInputStream()">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                <div class="form-group">
+                                    <!--<label class="control-label">наименование юридического лица</label>-->
+
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-model="person.name"
+                                           placeholder="Наименование" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                <div class="form-group">
+                                    <!--<label class="control-label">ИНН</label>-->
+
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="person.inn"
+                                           placeholder="ИНН" />
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                <div class="form-group">
+                                    <!--<label class="control-label">ОГРН</label>-->
+
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="person.ogrn"
+                                           placeholder="ОГРН" />
+
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" value="Поиск" class="btn btn-primary btn-sm">
+                    </form>
+
+                    <div ng-show="people.length != 0 && !formAddPersonVisible && !formEditPersonVisible">
+                        <table class="table table-striped table-condensed table-hover">
+                            <thead>
+                                <!--<th>Id</th>-->
+                            <th>Наименование</th>
+                            <th>ИНН</th>
+                            
+                            <!--<th>КПП</th>-->
+                            <th>ОГРН</th>
+                            
+                            <!--<th>дата рождения</th>
+                            <th>серия паспорта</th>
+                            <th>номер паспорта</th>-->
+                            
+                            <!--<th>телефоны</th>-->
+                            <th>&nbsp;</th>
+                            
+                            <!--<th>-</th>--> <!-- oleg -->
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in people">
+                                    <!--<td>{{item.id}}</td>-->
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.inn}}</td>
+                                    
+                                    <!--<td>{{item.kpp}}</td>-->
+                                    <td>{{item.ogrn}}</td>
+                                    
+                                    <!--<td>{{item.dateBirth | date:'dd.MM.yyyy'}}</td>
+                                    <td>{{item.seria}}</td>
+                                    <td>{{item.number}}</td>
+                                    <td>{{item.phones}}</td>-->
+                                    <td>
+                                        <a ng-click="personopen(item.id);" href="#/Person/Info/{{item.id}}" title="Открыть">
+                                            <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                                        </a>
+                                    </td>
+                                    <!-- oleg -->
+                                    
+                                    <!--<td>
+                                        <a ng-click="personupdate(item);">редактировать</a>
+                                        <a ng-click="personupdate(item); $parent.formEditPersonVisible = !$parent.formEditPersonVisible;">редактировать</a>
+                                    </td>-->
+                                    <!-- end oleg $scope.person -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel panel-primary" ng-show="(addPersonVisible && !formAddPersonVisible) || formAddPersonVisible">
+                <div class="panel-body">
+                    <div ng-show="addPersonVisible && !formAddPersonVisible">
+                        <button class="btn btn-primary btn-sm"
+                                ng-click="formAddPersonVisible = true;">
+                            добавить новое юридическое лицо
+                        </button>
+                        <br />
+                    </div>
+
+                    <div ng-show="formAddPersonVisible">
+                        <legend>добавление нового юридического лица</legend>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">наименование компании</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-init="personNew.name = ''"
+                                           ng-model="personNew.name" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">юридический (почтовый) адрес</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-init="personNew.address = ''"
+                                           ng-model="personNew.address" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">ОГРН</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-init="personNew.ogrn = ''"
+                                           ng-model="personNew.ogrn" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">ИНН</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-init="personNew.inn = ''"
+                                           ng-model="personNew.inn" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">КПП</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-init="personNew.kpp = ''"
+                                           ng-model="personNew.kpp" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">основной номер телефона</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-init="personNew.phone = ''"
+                                           ng-model="personNew.phone" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">регион</label>
+                                <div class="col-sm-10">
+                                    <select ng-model="personNew.selectRegion"
+                                            ng-change="personNew.idRegion = personNew.selectRegion.id"
+                                            ng-init="personNew.selectRegion = null"
+                                            ng-options="item as item.name for item in regions"
+                                            class="form-control" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">комментарий</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-init="personNew.comment = ''"
+                                           ng-model="personNew.comment" />
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group">
+                                <label class="col-sm-2 control-label">дата рождения</label>
+                                <div class="col-sm-10">
+                                    <input type="date"
+                                           class="form-control"
+                                           ng-init="personNew.dateBirth = null"
+                                           ng-model="personNew.dateBirth" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">пол</label>
+                                <div class="col-sm-10">
+                                    <select ng-model="personNew.selectSex"
+                                            ng-change="personNew.sex = personNew.selectSex.sex"
+                                            ng-init="personNew.selectSex = null"
+                                            ng-options="sex.name for sex in sexs"
+                                            class="form-control" />
+                                </div>
+                            </div>-->
+
+
+
+                            <!--<div class="form-group">
+                                <label class="col-sm-2 control-label">услуга</label>
+                                <div class="col-sm-10">
+                                    <select ng-model="personNew.selectProductService"
+                                            ng-change="personNew.idProductService = personNew.selectProductService.id"
+                                            ng-init="personNew.selectProductService = null"
+                                            ng-options="item as item.name for item in productservices"
+                                            class="form-control" />
+                                </div>
+                            </div>-->
+
+
+
+                            <!--<div class="form-group">
+                                <label class="col-sm-2 control-label">задача</label>
+                                <div class="col-sm-10">
+                                    <select ng-model="personNew.selectTaskType"
+                                            ng-change="personNew.idTaskType = personNew.selectTaskType.id"
+                                            ng-init="personNew.selectTaskType = null"
+                                            ng-options="item as item.name for item in tasktypes"
+                                            class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">комментарий</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                           class="form-control"
+                                           ng-init="personNew.comment = ''"
+                                           ng-model="personNew.comment" />
+                                </div>
+                            </div>-->
+
+
+                        </div>
+
+                        <button class="btn btn-primary btn-sm"
+                                ng-show="formAddPersonVisible"
+                                ng-click="addPersonInputStream()">
+                            сохранить
+                        </button>
+
+                        <button class="btn btn-primary btn-sm"
+                                ng-show="formAddPersonVisible"
+                                ng-click="formAddPersonVisible = false;">
+                            отмена
+                        </button>
+
+                    </div>
+
+
+                    <!--<div ng-show="formEditPersonVisible" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="lastName" class="col-sm-2 control-label">фамилия</label>
+                            <div class="col-sm-10">
+                                <input type="text"
+                                       class="form-control"
+                                       id="lastName"
+                                       ng-model="person.lastName" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="firstName" class="col-sm-2 control-label">имя</label>
+                            <div class="col-sm-10">
+                                <input type="text"
+                                       class="form-control"
+                                       id="firstName"
+                                       ng-model="person.firstName" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="middleName" class="col-sm-2 control-label">отчество</label>
+                            <div class="col-sm-10">
+                                <input type="text"
+                                       class="form-control"
+                                       id="middleName"
+                                       ng-model="person.middleName" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="birthDate" class="col-sm-2 control-label">дата рождения</label>
+                            <div class="col-sm-10">
+                                <input type="date"
+                                       class="form-control"
+                                       id="birthDate"
+                                       ng-model="person.birthDate" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sex"
+                                   class="col-sm-2 control-label">пол</label>
+                            <div class="col-sm-10">
+                                <select ng-model="selectedSex"
+                                        ng-options="sex.name for sex in sexs" ng-change="sexChanged()"
+                                        class="form-control" id="sex" />
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <button class="btn btn-primary btn-sm" ng-click="savePerson()">сохранить</button>
+                            <button class="btn btn-primary btn-sm" ng-click="cancelPerson(); formEditPersonVisible = false;">отмена</button>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+

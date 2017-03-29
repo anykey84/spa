@@ -1,0 +1,239 @@
+﻿<div ng-show="VisibleProfileInWork" class="alert alert-info">
+    <legend>Документы в работе за вами</legend>
+
+    <div ng-show="processing['loadPersonsProfileInWork']
+                    || processing['loadContractsProfileInWork']
+                    || processing['loadPersonsProfileInWork']
+                    || processing['loadPersonsProfileInWork']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+
+    </div>
+
+    <div ng-show="!processing['loadPersonsProfileInWork']
+                    && !processing['loadContractsProfileInWork']
+                    && !processing['loadPersonsProfileInWork']
+                    && !processing['loadPersonsProfileInWork']">
+
+
+        <legend>закрепленные физ лица</legend>
+
+
+        @*<div ng-show="VisibleAttachPersonsProfileInWork">
+                <button class="btn btn-primary btn-sm"
+                        ng-init="isSelectPersonsAll = false;"
+                        ng-click="isSelectPersonsAll = !isSelectPersonsAll; selectPersonsAll(isSelectPersonsAll);">
+                    <div ng-show="!isSelectPersonsAll">
+                        выбрать все физ лица
+                    </div>
+                    <div ng-show="isSelectPersonsAll">
+                        снять все физ лица
+                    </div>
+                </button>
+
+                <button class="btn btn-primary btn-sm" ng-click="attachPersonsProfileInWork();">закрепить физ лица</button>
+                <button class="btn btn-primary btn-sm" ng-click="detachPersonsProfileInWork();">открепить физ лица</button>
+                <br />
+                <br />
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">выберите сотрудника</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selectedPersonProfile"
+                                    ng-options="item as item.profileFullName for item in profiles"
+                                    class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">укажите комментарий</label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="введите ваш комментарий"
+                                   ng-model="commentPerson" />
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        <table class="table">
+            <thead>
+                @*<th ng-show="VisibleAttachPersonsProfileInWork">закрепить</th>*@
+            <th>физ лицо</th>
+            <th></th>
+            <th>инициатор</th>
+            <th>задача</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in persons | orderBy: 'dateCreate' : true"
+                    ng-class="{'danger': item.dateCreateFirstResult == null } ">
+                    @*ng-class="{'warning': task.status == 'Hold' , 'success': task.status == 'Completed', 'active': task.status == 'Started', 'danger': item.dateCreateFirstResult == null } ">*@
+
+                    @*<td ng-show="VisibleAttachPersonsProfileInWork">
+                <button class="btn btn-primary btn-xs" ng-click="item.isSelected = !item.isSelected;">
+                    <div ng-show="!item.isSelected">
+                        выбрать
+                    </div>
+                    <div class="btn btn-primary btn-xs" ng-show="item.isSelected">
+                        снять
+                    </div>
+                </button>
+            </td>*@
+                    <td>
+                        <a href="#/Person/Info/{{item.id_Person}}">{{item.personFullName}}</a>
+                        <br />
+                        <ins>комментарий:</ins>
+                        {{item.comment}}
+                    </td>
+
+                    <td>
+                        <ins>дата создания:</ins>
+                        <br />
+                        {{item.dateCreate | dateFormatLong}}
+                        <br />
+                        <ins>план дата:</ins>
+                        <br />
+                        {{item.dateWorker | dateFormatLong}}
+                        <br />
+                        {{item.dateCreateFirstResult | dateFormatLong}}
+                    </td>
+
+                    <td>
+                        <ins>инициатор:</ins>
+                        <br />
+                        {{item.createrFullName}}
+                        <br />
+                        <ins>в работе:</ins>
+                        <br />
+                        {{item.workerFullName}}
+                    </td>
+
+                    <td>
+                        <b>{{item.taskTypeName}}</b>
+                        <br />
+                        коментарий: {{item.taskDescription}}
+                        <br />
+                        <ins>дата создания:</ins>
+                        {{item.taskDateCreate | dateFormatLong}}
+                        <br />
+                        <ins>план дата:</ins>
+                        {{item.taskDatePlanned  | dateFormatLong}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <legend>закрепленные договора</legend>
+
+        @*<div ng-show="VisibleAttachContractsProfileInWork">
+                <button class="btn btn-primary btn-sm"
+                        ng-init="isSelectContractsAll = false;"
+                        ng-click="isSelectContractsAll = !isSelectContractsAll; selectContractsAll(isSelectContractsAll);">
+                    <div ng-show="!isSelectContractsAll">
+                        выбрать все договора
+                    </div>
+                    <div ng-show="isSelectContractsAll">
+                        снять все договора
+                    </div>
+                </button>
+
+                <button class="btn btn-primary btn-sm" ng-click="attachContractsProfileInWork();">закрепить договора</button>
+                <button class="btn btn-primary btn-sm" ng-click="detachContractsProfileInWork();">открепить договора</button>
+                <br />
+                <br />
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">выберите сотрудника</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selectedContractProfile"
+                                    ng-options="item as item.profileFullName for item in profiles"
+                                    class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">укажите комментарий</label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="введите ваш комментарий"
+                                   ng-model="commentContract" />
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        <table class="table">
+            <thead>
+                @*<th ng-show="VisibleAttachContractsProfileInWork">закрепить</th>*@
+            <th>договор</th>
+            <th></th>
+            <th>инициатор</th>
+            <th>задача</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in contracts | orderBy: 'dateCreate' :true">
+
+                    @*<td ng-show="VisibleAttachContractsProfileInWork">
+                            <button class="btn btn-primary btn-xs" ng-click="item.isSelected = !item.isSelected;">
+                                <div ng-show="!item.isSelected">
+                                    выбрать
+                                </div>
+                                <div class="btn btn-primary btn-xs" ng-show="item.isSelected">
+                                    снять
+                                </div>
+                            </button>
+                        </td>*@
+
+                    <td>
+                        <a href="#/Person/Info/{{item.id_Person}}">{{item.personFullName}}</a>
+                        <br />
+                        <a href="#/Contract/Info/{{item.id_Contract}}">{{item.contractNumber}}</a>
+                        <br />
+                        <ins>комментарий:</ins>
+                        {{item.comment}}
+                    </td>
+
+                    <td>
+                        <ins>дата создания:</ins>
+                        <br />
+                        {{item.dateCreate | dateFormatLong}}
+                        <br />
+                        <ins>план дата:</ins>
+                        <br />
+                        {{item.dateWorker | dateFormatLong}}
+
+                    </td>
+
+                    <td>
+                        <ins>инициатор:</ins>
+                        <br />
+                        {{item.createrFullName}}
+                        <br />
+                        <ins>в работе:</ins>
+                        <br />
+                        {{item.workerFullName}}
+                    </td>
+
+                    <td>
+                        <b>{{item.taskTypeName}}</b>
+                        <br />
+                        коментарий: {{item.taskDescription}}
+                        <br />
+                        <ins>дата создания:</ins>
+                        {{item.taskDateCreate | dateFormatLong}}
+                        <br />
+                        <ins>план дата:</ins>
+                        {{item.taskDatePlanned | dateFormatLong}}
+                    </td>
+
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

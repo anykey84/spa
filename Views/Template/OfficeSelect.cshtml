@@ -1,0 +1,43 @@
+﻿<div class="office-select panel panel-primary">
+    <div class="panel-body">
+        <div ng-show="processing['loadOfficeUsers'] || processing['loadCurrentOffice'] || processing['selectOffice']">
+
+            <div>
+                <my-progressbar message="{{message}}"
+                                visible="true"
+                                typebar="Leonardo" />
+            </div>
+            <br />
+        </div>
+
+        <div ng-show="!(processing['loadOfficeUsers'] || processing['loadCurrentOffice'] || processing['selectOffice'])">
+            <div ng-show="currentoffice.id_Office != -1">
+                <h4>Ваша текущая точка {{currentoffice.officeName}}</h4>
+            </div>
+            <div ng-show="currentoffice.id_Office == -1">
+                <h2>Точка не выбрана!</h2>
+            </div>
+
+
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                        @*<th>Название торговой точки</th>*@
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in officeusers" ng-click="officeChanged($index);" ng-class='{selected: $index == selectOffice.index}'>
+                            <td class="office">{{item.name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <button class="btn btn-primary btn-sm" ng-click="selectOffice()">
+                    Выбрать
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

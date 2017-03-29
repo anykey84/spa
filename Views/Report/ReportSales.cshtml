@@ -1,0 +1,40 @@
+﻿<div ng-init="visiblereportsales = false;">
+    <div>
+        <button class="btn btn-primary btn-sm"
+                ng-show="!visiblereportsales"
+                ng-click="visiblereportsales = !visiblereportsales; visibleClick(visiblereportsales);">
+            отчет по продажам
+        </button>
+
+
+        <div ng-show="visiblereportsales">
+
+            <legend>отчет по продажам</legend>
+
+            <div class="form-inline">
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">период с:</label>
+                    <div class="col-sm-10">
+                        <input type="date"
+                               class="form-control"
+                               ng-model="dateReport.date" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">по: </label>
+                    <div class="col-sm-10">
+                        <input type="date"
+                               class="form-control"
+                               ng-model="dateReport.dateTo" />
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-sm" ng-click="generateReport();">сгенерировать</button>
+            </div>
+            <br />
+            <button class="btn btn-primary btn-sm" ng-click="visiblereportsales = !visiblereportsales; visibleClick(visiblereportsales); ">закрыть</button>
+        </div>
+    </div>
+</div>

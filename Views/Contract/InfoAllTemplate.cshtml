@@ -1,0 +1,48 @@
+﻿<div>
+
+    <legend>№ {{contract.number}} от {{contract.dateCreate}} - {{contract.owner}} ({{contract.lastStatus}})</legend>
+
+    <div ng-show="VisibleTabContract_Task">
+        <my-task contract="contract"
+                 person="null" />
+    </div>
+
+    <div ng-show="VisibleTabContract_LoanInfo">
+        <my-contractloaninfo contract="contract" />
+    </div>
+
+    <div ng-show="VisibleTabContract_ContractParameter">
+        <my-contractparameter contract="contract"
+                              office="office" />
+    </div>
+
+    <div ng-show="VisibleTabContract_Task">
+        <my-contractpayment contract="contract" />
+    </div>
+
+    @*<div  ng-show="VisibleTabContract_Person">
+            <my-contractperson contract="contract" office="office" />
+        </div>*@
+
+    <div ng-show="VisibleTabContract_Status">
+        <my-contractstatus contract="contract" />
+    </div>
+
+
+    <div>
+        <my-personfile idcontract="contract.id"
+                       idpersondocument="null"
+                       idpayment="null"
+                       visible="true"
+                       visibleupload="false"
+                       visiblescanupload="false"
+                       visiblegenerategrahic="false"
+                       visiblegenerategraphic="false"
+                       visiblegeneratecontract="false"
+                       visiblegeneratecontractguarantee="false"
+                       visiblegeneratecontractprolongation="false"
+                       visibledelete="VisibleButtonDeleteFileContract"
+                       visibledownload="VisibleButtonDownloadFileContract" />
+    </div>
+</div>
+

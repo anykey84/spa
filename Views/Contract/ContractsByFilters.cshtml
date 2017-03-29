@@ -1,0 +1,135 @@
+﻿<div ng-show="VisibleContractsByFilters" class="alert alert-info">
+
+    <legend>справочник договоров с фильтром</legend>
+    <div>
+        <div ng-show="processing['loadContracts']
+             || processing['loadTaskTypes']
+             || processing['loadProfilesInWork']
+             || processing['getOffices']
+             || processing['loadStatusesloadStatuses']
+             || processing['loadTaskTypes']">
+
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="line" />
+            <br />
+        </div>
+
+        <div>
+            <my-servermessages messages="messages" />
+        </div>
+
+    </div>
+
+
+    <div ng-show="!processing['loadContracts']
+             && !processing['loadTaskTypes']
+             && !processing['loadProfilesInWork']
+             && !processing['getOffices']
+             && !processing['loadStatuses']
+             && !processing['loadTaskTypes']">
+        <div>
+            <h3>загружено {{contracts.length}} договоров</h3>
+        </div>
+
+
+        <div>
+            @*class="form-horizontal">*@
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="row">
+                            <label class="col-xs-4 col-md-5 col-lg-5 control-label">выберите задачу</label>
+                            <div class="col-xs-8 col-md-7 col-lg-7">
+                                <div class="input-group">
+                                    <select ng-model="selectedTaskType"
+                                            ng-change="idTaskType = selectedTaskType.id;"
+                                            ng-options="item as item.name for item in tasktypes | orderBy:'name'"
+                                            class="form-control" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-danger" type="button" ng-click="selectedTaskType = null; idTaskType = null;">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="row">
+                            <label class="col-xs-4 col-md-5 col-lg-5 control-label">выберите сотрудника</label>
+                            <div class="col-xs-8 col-md-7 col-lg-7">
+                                <div class="input-group">
+                                    <select ng-model="selectedProfile"
+                                            ng-change="idProfile = selectedProfile.id;"
+                                            ng-options="item as item.profileFullName for item in profiles | orderBy:'profileFullName'"
+                                            class="form-control" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-danger" type="button" ng-click="selectedProfile = null; idProfile = null;">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="row">
+                            <label class="col-xs-4 col-md-5 col-lg-5 control-label">выберите ОО</label>
+                            <div class="col-xs-8 col-md-7 col-lg-7">
+                                <div class="input-group">
+                                    <select ng-model="selectedOffice"
+                                            ng-change="idOffice = selectedOffice.id;"
+                                            ng-options="item as item.name for item in offices | orderBy:'name'"
+                                            class="form-control" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-danger" type="button" ng-click="selectedOffice = null; idOffice = null;">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="row">
+                            <label class="col-xs-4 col-md-5 col-lg-5 control-label">отчетный период с</label>
+                            <div class="col-xs-8 col-md-7 col-lg-7">
+                                <input ng-model="dateFrom" type="date" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="row">
+                            <label class="col-xs-4 col-md-5 col-lg-5  control-label">по</label>
+                            <div class="col-xs-8 col-md-7 col-lg-7">
+                                <input ng-model="dateTo" type="date" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-sm"
+                    ng-click="loadContracts();">
+                сгенерировать
+            </button>
+
+        </div>
+
+        <br />
+
+        <div>
+            <my-contracttable contracts="contracts" isvisibleattach="true" loadcontracts="loadContracts()" />
+        </div>
+
+
+    </div>
+</div>

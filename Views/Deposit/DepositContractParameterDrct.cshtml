@@ -1,0 +1,297 @@
+﻿<div>
+
+    <div ng-show="processing['canRestructuring']
+               || processing['addContractParameter']
+               || processing['addRestructuring']
+               || processing['addEearlyRepayment']
+               || processing['loadSchedule']
+               || processing['loadContractInfo']
+               || processing['getContractRecalcInfo']
+               || processing['addProlongation']
+               || processing['loadProduct']
+               || processing['generateSchedule']
+               || processing['loadContractIssue']
+               || processing['loadContractCodeLastStatus']
+               || processing['canProlongation']
+               || processing['loadContractParameter']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+        <br />
+    </div>
+
+    <div>
+        <my-servermessages messages="messages" />
+    </div>
+    @*<legend>сведения о займе</legend>*@
+
+    <div ng-show="!processing['canRestructuring']
+               && !processing['addContractParameter']
+               && !processing['addRestructuring']
+               && !processing['addEearlyRepayment']
+               && !processing['loadSchedule']
+               && !processing['loadContractInfo']
+               && !processing['getContractRecalcInfo']
+               && !processing['addProlongation']
+               && !processing['loadProduct']
+               && !processing['generateSchedule']
+               && !processing['loadContractIssue']
+               && !processing['loadContractCodeLastStatus']
+               && !processing['canProlongation']
+               && !processing['loadContractParameter']">
+
+
+
+        @*<legend>изменение сведений о займе (пролонгации)</legend>*@
+
+        <div ng-show="VisibleButtonEditContractParameter || VisibleButtonEditSumContractParameter">
+            <button class="btn btn-primary btn-sm"
+                    ng-show="btnEditContractParameter && contractParameter.id != 0"
+                    ng-click="btnEditContractParameter = !btnEditContractParameter;formEditContractParameter = !formEditContractParameter;editContractParameter();">
+                редактировать продукт
+            </button>
+            <br />
+            <br />
+        </div>
+
+        <div ng-show="formEditContractParameter" class="form-horizontal">
+
+            <div ng-show="VisibleButtonEditContractParameter || VisibleButtonEditSumContractParameter">
+                <div ng-show="VisibleButtonEditContractParameter">
+
+                    <div class="form-group">
+                        <label for="selectProd"
+                               class="col-sm-2 control-label">тип продукта</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selected"
+                                    ng-change="contractparameterTypeChanged(selected)"
+                                    ng-options="item as item.name for item in products | orderBy:'name'"
+                                    class="form-control" id="selectProd" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idperiod"
+                               class="col-sm-2 control-label">
+                            укажите кол-во дней
+                            выбрано {{contractParameter.periodCount}} дн.
+                        </label>
+
+                        @*<label for="idperiod"
+                               class="col-sm-2 control-label">
+                            укажите кол-во  {{selectproduct.periodName}};
+                            от {{selectproduct.minSpan}};
+                            выбрано {{contractParameter.periodCount}} {{selectproduct.periodName}}
+                        </label>*@
+
+                        <div class="col-sm-10">
+                            <input type="number"
+                                   ng-model="contractParameter.periodCount"
+                                   min="{{selectproduct.minSpan}}"
+                                   step="1"
+                                   class="form-control" id="idperiod" />
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="VisibleButtonEditSumContractParameter">
+
+                    <h4 ng-show="VisibleButtonEditSumContractParameter && !VisibleButtonEditContractParameter">
+                        вы можете изменить только сумму в меньшую сторону
+                    </h4>
+
+                    <div class="form-group">
+                        <label for="idsum"
+                               class="col-sm-2 control-label">сумма от {{selectproduct.minSum}}, до {{selectproduct.maxSum}}</label>
+                        <div class="col-sm-10">
+                            <input type="number"
+                                   step="1000"
+                                   min="{{selectproduct.minSum}}"
+                                   max="{{selectproduct.maxSum}}"
+                                   ng-model="contractParameter.sum"
+                                   class="form-control" id="idsum" />
+                        </div>
+                    </div>
+
+
+                    @*<label>сумма; минимум - {{selectproduct.minSum}} , максимум - {{selectproduct.maxSum}}</label>
+                        <br />
+                        <input type="number"
+                               step="1000"
+                               min="{{selectproduct.minSum}}"
+                               max="{{selectproduct.maxSum}}"
+                               ng-model="contractParameter.sum" />
+                        <br />
+                        <br />*@
+
+                    <button class="btn btn-primary btn-sm"
+                            ng-show="contractParameter.id != 0"
+                            ng-click="addContractParameterVisible = false;formSchedulePaymentVisible = false;formEditContractParameter = !formEditContractParameter;btnEditContractParameter = !btnEditContractParameter;">
+                        отмена
+                    </button>
+                    <br />
+                    <br />
+                </div>
+
+                <button class="btn btn-primary btn-sm" ng-click="generateSchedule()">оформить вклад</button>
+                <br />
+                <br />
+
+                <div ng-show="addContractParameterVisible">
+                    <button class="btn btn-primary btn-sm"
+                            ng-click="formEditContractParameter = false;addContractParameter()">
+                        подтвердить оформление вклада
+                    </button>
+                    <br />
+                </div>
+
+            </div>
+
+            <div ng-show="VisibleButtonEditSumNONContractParameter">
+                <h3>
+                    вы не можете изменить сумму в меньшую сторону, так как выбрана минимальная сумма для данного типа вклада
+                </h3>
+            </div>
+
+        </div>
+
+        <div ng-show="formSchedulePaymentVisible">
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                <th>дата</th>
+                <th>процент</th>
+                <th>НДФЛ</th>
+                <th>итого к выплате</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in schedule_temp">
+                        <td>{{item.datePay | date:'dd.MM.yyyy'}}</td>
+                        <td>{{item.sumInterest | number:2}}</td>
+                        <td>{{item.ndfl | number:2}} </td>
+                        <td>{{item.sumInterest - item.ndfl | number:2}} </td>
+                    </tr>
+
+                    <tr>
+                        <td> <b>итого</b> </td>
+                        <td> <b>{{totalInterest | number:2}}</b> </td>
+                        <td> <b>{{totalNdfl | number:2}}</b> </td>
+                        <td> <b>{{totalAll | number:2}}</b> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div ng-show="contractParameterVisible">
+            <div ng-init="formProlongationVisible = false" ng-show="VisibleButtonAddProlongation">
+                @*<button ng-click="generateContract()">сгенерировать новый договор</button>
+                    <br />
+                    <br />*@
+
+                <!--вывести список всех сгенерированных ранее договоров-->
+
+                <button class="btn btn-primary btn-sm"
+                        ng-show="addProlongationVisible" ng-click="formProlongationVisible = !formProlongationVisible">
+                    пролонгация
+                </button>
+                <div ng-show="formProlongationVisible">
+                    @*<label>укажите кол-во дней для пролонгации</label>
+                        <br />
+                        <input type="number"
+                               step="1"
+                               min="1"
+                               max="15"
+                               ng-model="contractParameter.periodProlongation" />
+                        <br />*@
+                    <button class="btn btn-primary btn-sm"
+                            ng-show="addProlongationVisible" ng-click="formProlongationVisible = !formProlongationVisible; addProlongation();">
+                        сделать пролонгацию
+                    </button>
+                    <button class="btn btn-primary btn-sm"
+                            ng-click="formProlongationVisible = !formProlongationVisible;">
+                        отмена
+                    </button>
+                </div>
+            </div>
+            <br />
+
+            <legend>история изменений сведений о вкладе</legend>
+
+            <table class="table table-striped table-condensed">
+                <thead>
+                <th>номер</th>
+                <th>сумма</th>
+                <th>дата начала</th>
+                <th>дата конца</th>
+                <th>процент</th>
+                <th>% пересчета при досрочн. возврате</th>
+                <th>тип</th>
+                @*<th>-</th>*@
+                @*<th ng-show="deleteContractParameterVisible">-</th>*@
+                </thead>
+                <tbody>
+                    <tr ng-repeat-start="item in contractparameters"
+                        ng-click="$parent.selectIndex = $index; getContractParameterInfo(item);">
+                        <td>{{item.id}}</td>
+                        <td>{{item.sum | number:2}}</td>
+                        <td>{{item.dateBegin | date:'dd.MM.yyyy'}}</td>
+                        <td>{{item.dateEnd | date:'dd.MM.yyyy'}}</td>
+                        <td>{{item.interest | number:2}}%</td>
+                        <td>{{item.penalty | number:2}}%</td>
+                        <td>{{item.contractParameterTypeName}}</td>
+                    </tr>
+
+                    <tr ng-repeat-end
+                        ng-if="$index == $parent.selectIndex;">
+                        <td colspan="7">
+                            <table class="table">
+                                <tr>
+                                    <td width="50%">
+                                        <table class="table">
+                                            <thead>
+                                            <th>дата графика</th>
+                                            <th>статья</th>
+                                            <th>сумма</th>
+                                            <th>списанная сумма</th>
+                                            @*<th>остаток</th>
+                                                <th>платеж</th>*@
+                                            </thead>
+                                            <tr ng-repeat="sInfo in item.contractParameterInfo.scheduledata">
+                                                <td>{{sInfo.scheduleDateTo | dateFormatShort}}</td>
+                                                <td>{{sInfo.paymentTypeName}}</td>
+                                                <td>{{sInfo.scheduleSum | number:2}}</td>
+                                                @*<td>{{sInfo.scheduleSumSumPart}}</td>
+                                                    <td>{{sInfo.scheduleSum - sInfo.scheduleSumSumPart}}</td>*@
+                                                <td>{{sInfo.comment}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="50%">
+                                        <table class="table">
+                                            <thead>
+                                            <th>номер</th>
+                                            <th>дата платежа</th>
+                                            <th>сумма</th>
+                                            <th>пользователь</th>
+                                            <th>офис</th>
+                                            </thead>
+                                            <tr ng-repeat="pInfo in item.contractParameterInfo.payments">
+                                                <td>{{pInfo.id}}</td>
+                                                <td>{{pInfo.datePay | dateFormatShort}}</td>
+                                                <td>{{pInfo.sum | number:2}}</td>
+                                                <td>{{pInfo.userCreate}}</td>
+                                                <td>{{pInfo.officeCreate}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

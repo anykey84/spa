@@ -1,0 +1,29 @@
+﻿<div>
+    <legend>Маршруты</legend>
+
+    <div>
+        <div ng-show="processing['loadRoutes']">
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="line" />
+            <br />
+        </div>
+
+        <div>
+            <my-servermessages messages="messages" />
+        </div>
+    </div>
+
+
+
+    <div ng-show="!processing['loadRoutes']
+                            && !processing['loadTypeParameters']
+                            && !processing['loadDocumentPropertyArrays']
+                            && !processing['addDocument']">
+
+        Тут создаются маршруты
+
+    </div>
+
+</div>
+

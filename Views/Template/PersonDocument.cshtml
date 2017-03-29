@@ -1,0 +1,227 @@
+﻿<div>
+
+    <div ng-show="processing['loadPersonDocument']
+               || processing['addPerson_DocumentProperty']
+               || processing['addPerson_Document']
+               || processing['delPerson_Document']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+        <br />
+    </div>
+
+    <div>
+        <my-servermessages messages="messages" />
+    </div>
+
+    <div ng-show="visibleadddocument">
+
+        <button class="btn btn-primary btn-sm" ng-click="addPerson_Document(typedoc.id)">создать новый документ</button>
+        <br />
+        <br />
+    </div>
+
+    <div ng-repeat="d in documents">
+        <div>
+            <h4>{{d.name}}</h4>
+            @*<p>{{d.id_Person_Document}}</p>*@
+            <button class="btn btn-primary btn-sm" ng-click="openPerson_Document(d)">открыть</button>
+            @*<button ng-click="editPerson_Document(d)">редактировать</button>*@
+            <button class="btn btn-primary btn-sm" ng-click="delPerson_Document(d.id_Person_Document)">удалить</button>
+        </div>
+
+        <div ng-show="d.isVisible">
+
+            <div>
+                <my-personfile idcontract="null"
+                               type="document"
+                               idpersondocument="d.id_Person_Document"
+                               reporttype="null"
+                               idpayment="null"
+                               idfiletype="typedoc.idfiletype"
+                               visibledelete="visibledeletefiledocument"
+                               visibledownload="visibledownloadfiledocument"
+                               visible="visiblefiledocument"
+                               visibleupload="visibleuploadfiledocument" />
+            </div>
+
+            <table class="table borderless">
+                <thead>
+                <th>свойство</th>
+                <th>значение</th>
+                <th>статус</th>
+                </thead>
+                <tbody>
+
+
+                    <tr ng-repeat="item in d.values">
+                        @*<td>{{item.propertyName}} + ' - ' + {{item.id_Person_DocumentProperty}}</td>*@
+                        <td class="col-md-2">{{item.propertyName}}</td>
+                        <td class="col-md-12" ng-switch on="item.propertyType">
+
+                            @*ng-focus="documentPropertyChanged(item)"
+                                ng-change="documentPropertyChange(item)"
+                            *@
+
+                            <div ng-show="EnableValidationPerson_Document">
+                                <my-servermessages messages="item.messages"></my-servermessages>
+                            </div>
+
+                            <input ng-switch-when="text"
+                                   class="form-control"
+                                   ng-focus="focus(item)"
+                                   ng-model="item.propertyValue"
+                                   my-focus="item.focusField"
+                                   my-blur="blur(item)">
+
+                            <select ng-switch-when="array"
+                                    class="form-control"
+                                    ng-init="initSelectedDocumentPropertyArray(item)"
+                                    ng-model="item.selectedDocumentPropertyArray"
+                                    ng-focus="focus(item)"
+                                    my-focus="item.focusField"
+                                    my-blur="blur(item)"
+                                    ng-options="i as i.arrayValue for i in item.arrays"
+                                    ng-change="documentPropertyArrayChange(item)"></select>
+
+                            <div ng-switch-when="address">
+                                @*<my-address address="item.address" pdp="item" />*@
+                                <my-address type="pdp" visiblebutton="true" idaddress="item.propertyValue" data="item.id_Person_DocumentProperty" />
+                            </div>
+
+                            <div ng-switch-when="checkbox">
+                                <input type="checkbox"
+                                       ng-model="item.propertyValue"
+                                       ng-true-value="true" ng-false-value="false"
+                                       ng-focus="focus(item)"
+                                       my-focus="item.focusField"
+                                       my-blur="blur(item)" />
+
+                            </div>
+
+                            <div ng-switch-when="date">
+                                <input type="text" mask="9999-99-99" placeholder="Введите дату в формате ГГГГ-ММ-ДД"
+                                       class="form-control"
+                                       ng-model="item.propertyValue"
+                                       ng-focus="focus(item)"
+                                       my-focus="item.focusField"
+                                       my-blur="blur(item)"
+                                       novalidate />
+                            </div>
+
+                            <div ng-switch-when="xml">
+                                <button class="btn btn-primary btn-xs" ng-click="addPerson_DocumentProperty(item)">добавить</button>
+                                <button class="btn btn-primary btn-xs" ng-click="delPerson_DocumentProperty(item)">удалить</button>
+                                <table class="table borderless" ng-show="d.isVisible">
+                                    <thead>
+                                    <th>свойство</th>
+                                    <th>значение</th>
+                                    <th>статус</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="q in item.items">
+                                            @*<td>{{q.propertyName}} + ' - ' + {{q.id_Person_DocumentProperty}}</td>*@
+                                            <td>{{q.propertyName}}</td>
+
+                                            <td ng-switch on="q.propertyType">
+                                                <div ng-show="EnableValidationPerson_Document">
+                                                    <my-servermessages messages="q.messages"></my-servermessages>
+                                                </div>
+                                                <input ng-switch-when="text"
+                                                       class="form-control"
+                                                       ng-focus="focus(q)"
+                                                       ng-model="q.propertyValue"
+                                                       my-focus="q.focusField"
+                                                       my-blur="blur(q)">
+
+                                                <div ng-switch-when="date">
+                                                    <input type="text" mask="9999-99-99" placeholder="Введите дату в формате ГГГГ-ММ-ДД" novalidate
+                                                           class="form-control"
+                                                           ng-model="q.propertyValue"
+                                                           ng-focus="focus(q)"
+                                                           my-focus="q.focusField"
+                                                           my-blur="blur(q)" />
+                                                </div>
+
+                                                @*<input ng-switch-when="text"
+                                                    class="form-control"
+                                                    ng-change="documentPropertyChange(q)"
+                                                    ng-model="q.propertyValue"
+                                                    ng-focus="documentPropertyChildChanged(q)">*@
+
+                                            </td>
+
+                                            <td>
+                                                <div ng-show="q.isSaved && q.isSaved !== null">
+                                                    <my-progressbar typebar="check" visible="true" />
+                                                </div>
+
+                                                <div ng-show="processing[q.id_Person_DocumentProperty]">
+                                                    <my-progressbar typebar="circle" visible="true" />
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div ng-show="item.isSaved && item.isSaved !== null">
+                                <my-progressbar typebar="check" visible="true" />
+                            </div>
+                            @*<div ng-show="!item.isSaved && item.isSaved !== null">
+                                    <my-progressbar typebar="circle" visible="true" />
+                                </div>*@
+
+                            <div ng-show="processing[item.id_Person_DocumentProperty]">
+                                <my-progressbar typebar="circle" visible="true" />
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    <tr ng-show="typedoc.idfiletype == 23">
+                        <td class="col-md-2">Принадлежность к Перечню лиц, в отношении которых имеются сведения об их причастности к экстремистской деятельности и терроризму</td>
+                        <td class="col-md-12">
+                            <input value="проверен" readonly="readonly"
+                                   class="form-control" />
+                        </td>
+                        <td> </td>
+                    </tr>
+
+                    <tr ng-show="typedoc.idfiletype == 23">
+                        <td class="col-md-2">Присвоение уровня риска легализации (отмывания) доходов, полученных преступным путем и финансирование терроризма</td>
+                        <td class="col-md-12">
+                            <input value="регулярный" readonly="readonly"
+                                   class="form-control" />
+                        </td>
+                        <td> </td>
+                    </tr>
+
+                    <tr ng-show="typedoc.idfiletype == 23">
+                        <td class="col-md-2">Принятое решение о бенефициарном владельце</td>
+                        <td class="col-md-12">
+                            <input value="признается само лицо по причине отсутствия иных лиц, имеющих возможность оказывать влияние на принятие решений."
+                                   class="form-control" readonly="readonly" />
+                        </td>
+                        <td> </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+
+
+        </div>
+
+        <br />
+        <br />
+    </div>
+</div>
+

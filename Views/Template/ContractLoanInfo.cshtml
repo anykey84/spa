@@ -1,0 +1,218 @@
+﻿<div>
+    <legend>сведения о займе</legend>
+
+    <div ng-show="processing['loadContractLoanInfo']
+                || processing['loadContractInfo']
+                || processing['addEearlyRepayment']
+                || processing['loadSchedule']">
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+        <br />
+    </div>
+
+    <div>
+        <my-servermessages messages="messages" />
+    </div>
+
+
+    <div ng-show="!processing['loadContractLoanInfo']
+                && !processing['loadContractInfo']
+                && !processing['addEearlyRepayment']
+                && !processing['loadSchedule']">
+
+        <h3>продукт: {{contractLoanInfo.productName}}</h3>
+
+        <table class="table table-striped table-condensed table-hover">
+
+            <tbody>
+                <tr>
+                    <td> </td>
+                    <td><b>пеня</b></td>
+                    <td><b>процент</b></td>
+                    <td><b>основной долг</b></td>
+                    <td><b>итого</b></td>
+                </tr>
+
+                <tr>
+                    <td>всего</td>
+                    <td>{{contractLoanInfo.sumPenalty | number:2}}</td>
+                    <td>{{contractLoanInfo.sumInterest | number:2}}</td>
+                    <td>{{contractLoanInfo.sumDebt | number:2}}</td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td>выплачено</td>
+                    <td>{{contractLoanInfo.sumPenaltyPay | number:2}}</td>
+                    <td>{{contractLoanInfo.sumInterestPay | number:2}}</td>
+                    <td>{{contractLoanInfo.sumDebtPay | number:2}}</td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td>долг</td>
+                    <td>{{contractLoanInfo.sumPenalty - contractLoanInfo.sumPenaltyPay | number:2}}</td>
+                    <td>{{contractLoanInfo.sumInterest - contractLoanInfo.sumInterestPay | number:2}}</td>
+                    <td>{{contractLoanInfo.sumDebt - contractLoanInfo.sumDebtPay | number:2}}</td>
+                    <td> </td>
+                </tr>
+
+                <tr>
+                    <td colspan="5"></td>
+                </tr>
+
+                <tr>
+                    <td><b>полное досрочное погашение</b></td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @*<button class="btn btn-primary btn-sm"
+                                    ng-click="addEearlyRepayment();">
+                                выполнить досрочное погашение
+                            </button>*@
+                        @*досрочное погашение*@
+                    </td>
+                    <td>{{contractRecalcInfo.contractleftdebt.leftContract | number:2}}</td>
+                    <td>{{contractRecalcInfo.contractleftdebt.leftDebtContract | number:2}}</td>
+                    <td>{{contractRecalcInfo.contractleftdebt.leftDebtContract - contractRecalcInfo.contractleftdebt.leftContract | number:2}}</td>
+                    <td> </td>
+                </tr>
+
+
+                <tr>
+                    <td colspan="4"></td>
+                </tr>
+                <tr>
+                    <td><b>платежи</b></td>
+                    <td><b>номер</b></td>
+                    <td><b>дата</b></td>
+                    <td><b>платеж</b></td>
+                    <td> </td>
+                </tr>
+
+                <tr ng-repeat="item in contractRecalcInfo.payments">
+                    <td></td>
+                    <td>{{item.id}}</td>
+                    <td>{{item.datePay | date:'dd.MM.yyyy'}}</td>
+                    <td>{{item.sum | number:2}}</td>
+                    <td> </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+        @*  <legend>платежи</legend>
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                <th>номер</th>
+                <th>дата</th>
+                <th>платеж</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in contractRecalcInfo.payments">
+                        <td>{{item.id}}</td>
+                        <td>{{item.datePay | date:'dd.MM.yyyy'}}</td>
+                        <td>{{item.sum | number:2}}</td>
+                    </tr>
+                </tbody>
+            </table>*@
+
+        @*<div>
+                <h4>{{contractLoanInfo.productName}}</h4>
+                <h4>пеня - {{contractLoanInfo.sumPenalty}} руб.; уплачено - {{contractLoanInfo.sumPenaltyPay}} руб.</h4>
+                <h4>проценты - {{contractLoanInfo.sumInterest}} руб.; уплачено - {{contractLoanInfo.sumInterestPay}} руб.</h4>
+                <h4>основной долг - {{contractLoanInfo.sumDebt}} руб.; уплачено - {{contractLoanInfo.sumDebtPay}} руб.</h4>
+                <br />
+                <h4>
+                    итого - {{contractLoanInfo.sumPenalty + contractLoanInfo.sumDebt+ contractLoanInfo.sumInterest}} руб.;
+                    уплачено - {{contractLoanInfo.sumPenaltyPay + contractLoanInfo.sumDebtPay + contractLoanInfo.sumInterestPay}} руб.
+                </h4>
+            </div>*@
+
+        @*<table class="table table-striped table-condensed table-hover">
+                <thead>
+                <th>дата начала</th>
+                <th>дата окончания</th>
+                <th>сумма займа</th>
+                <th>процент</th>
+                <th>пеня</th>
+                <th>тип</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in contractparameters">
+                        <td>{{item.dateBegin}}</td>
+                        <td>{{item.dateEnd}}</td>
+                        <td>{{item.sum}}</td>
+                        <td>{{item.interest}}%</td>
+                        <td>{{item.penalty}}%</td>
+                        <td>{{item.contractParameterTypeName}}</td>
+                    </tr>
+                </tbody>
+            </table>*@
+
+        @* <legend>график платежей</legend>
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                <th>дата</th>
+                <th>платеж</th>
+                <th>основной долг</th>
+                <th>процент</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in schedule">
+                        <td>{{item.datePay | date:'dd.MM.yyyy'}}</td>
+                        <td>{{item.sumDebt + item.sumInterest | number:2}}</td>
+                        <td>{{item.sumDebt | number:2}}</td>
+                        <td>{{item.sumInterest | number:2}}</td>
+                    </tr>
+                </tbody>
+            </table>*@
+
+
+        @*<legend>справка счет</legend>
+
+            <legend>график остатков платежей</legend>
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                <th>номер</th>
+                <th>дата</th>
+                <th>сумма</th>
+                <th>статья списания</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in contractRecalcInfo.schedule">
+                        <td>{{item.scheduleId}}</td>
+                        <td>{{item.scheduleDateTo | date:'dd.MM.yyyy'}}</td>
+                        <td>{{item.scheduleSum | number:2}}</td>
+                        <td>{{item.paymentTypeName}}</td>
+                    </tr>
+                </tbody>
+            </table>*@
+
+        @*<legend>распределение платежей</legend>
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                <th>номер</th>
+                <th>дата</th>
+                <th>сумма</th>
+                <th>номер ордера</th>
+                <th>статья списания</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in contractRecalcInfo.paymentparts">
+                        <td>{{item.indexRow}}</td>
+                        <td>{{item.dateTo | date:'dd.MM.yyyy'}}</td>
+                        <td>{{item.sum | number:2}}</td>
+                        <td>{{item.paymentId}}</td>
+                        <td>{{item.paymentTypeName}}</td>
+                    </tr>
+                </tbody>
+            </table>*@
+
+    </div>
+</div>

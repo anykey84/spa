@@ -1,0 +1,195 @@
+﻿<div>
+    <my-alert-messages isload="true" />
+</div>
+
+<div>
+    <legend>отчеты</legend>
+
+    <div ng-show="VisibleReportContractInWork">
+        <div>
+        <my-reportfile visible="true"
+                       visibledelete="true"
+                       visibledownload="true"
+                       typereport="contractsinwork"
+                       isuser="false"
+                       idfiletype="26" />
+    </div>
+    <br />
+    </div>
+
+    <div ng-show="VisibleReportSales">
+        <div>
+        <my-reportfile visible="true"
+                       visibledelete="true"
+                       visibledownload="true"
+                       typereport="sales"
+                       isuser="false"
+                       idfiletype="46" />
+    </div>
+    <br />
+    </div>
+
+    <div ng-show="VisibleReportProfitOverdue">
+        <div>
+        <my-reportfile visible="true"
+                       visibledelete="true"
+                       visibledownload="true"
+                       typereport="profitoverdue"
+                       isuser="false"
+                       idfiletype="49" />
+    </div>
+    <br />
+    </div>
+
+    <div ng-show="VisibleReportSalesCall">
+        <div>
+        <my-reportfile visible="true"
+                       visibledelete="true"
+                       visibledownload="true"
+                       typereport="salescall"
+                       isuser="false"
+                       idfiletype="48" />
+    </div>
+    <br />
+    </div>
+
+    <div ng-show="VisibleReportManagerReturnsIssuance">
+        <div>
+        <my-reportfile visible="true"
+                       visibledelete="true"
+                       visibledownload="true"
+                       typereport="managerreturnsissuance"
+                       isuser="false"
+                       idfiletype="50" />
+    </div>
+    <br />
+    </div>
+
+    <div ng-show="VisibleReportReestr">
+        <div>
+        <my-reportfile visible="true"
+                       visibledelete="true"
+                       visibledownload="true"
+                       typereport="reestr"
+                       isuser="false"
+                       idfiletype="55" />
+    </div>
+    <br />
+    </div>
+
+
+    <div ng-show="VisibleReportAverageWeighted">
+        <div>
+        <my-reportfile visible="true"
+                       visibledelete="true"
+                       visibledownload="true"
+                       typereport="averageweighted"
+                       isuser="false"
+                       idfiletype="57" />
+    </div>
+        <br />
+    </div>
+
+    <div class="panel panel-primary" ng-show="VisibleReportInterestPaymentDeposit || VisibleReportDepositDebtDeposit || VisibleReportInterestDebtDeposit">
+        <div class="panel-heading">отчеты о вкладах</div>
+        <div class="panel-body">
+
+    @*Выплата % по вкладам*@
+            <div ng-if="VisibleReportInterestPaymentDeposit"
+                    ng-show="VisibleReportInterestPaymentDeposit">
+            <div>
+                <my-reportfile visible="true"
+                            visibledelete="true"
+                            visibledownload="true"
+                                    typereport="typicalreport"
+                                    isuser="false"
+                            idfiletype="71" />
+            </div>
+            <br />
+            </div>
+
+
+        @*График возврата вкладов*@
+            <div ng-if="VisibleReportDepositDebtDeposit"
+                    ng-show="VisibleReportDepositDebtDeposit">
+            <div>
+                <my-reportfile visible="true"
+                            visibledelete="true"
+                            visibledownload="true"
+                                    typereport="typicalreport"
+                                    isuser="false"
+                            idfiletype="72" />
+            </div>
+            <br />
+            </div>
+
+
+        @*Начисление % по вкладам*@
+            <div ng-if="VisibleReportInterestDebtDeposit"
+                    ng-show="VisibleReportInterestDebtDeposit">
+                <div>
+                    <my-reportfile visible="true"
+                                visibledelete="true"
+                                visibledownload="true"
+                                        typereport="typicalreport"
+                                        isuser="false"
+                                idfiletype="73" />
+                </div>
+                <br />
+            </div>
+
+        </div>
+    </div>
+
+    @*TimeControl*@
+    <div ng-if="VisibleReportTimeControl"
+         ng-show="VisibleReportTimeControl">
+        <div>
+            <my-reportfile visible="true"
+                           visibledelete="true"
+                           visibledownload="true"
+                           typereport="typicalreport"
+                           isuser="true"
+                           idfiletype="74" />
+        </div>
+        <br />
+    </div>
+    
+    @*Инвентаризация задолженности*@
+    <div ng-if="VisibleReportInventory"
+         ng-show="VisibleReportInventory">
+        @*Инвентаризация (Обеспеченные)*@
+        <div>
+            <my-reportfile visible="true"
+                           visibledelete="true"
+                           visibledownload="true"
+                           typereport="typicalreport"
+                           iduser="true"
+                           idfiletype="75" />
+        </div>
+        <br />
+        @*Инвентаризация (Необеспеченные)*@
+        <div>
+            <my-reportfile visible="true"
+                           visibledelete="true"
+                           visibledownload="true"
+                           typereport="typicalreport"
+                           iduser="true"
+                           idfiletype="76" />
+        </div>
+        <br />
+    </div>
+
+    <div ng-if="VisibleReportDetectedTerrorists"
+         ng-show="VisibleReportDetectedTerrorists">
+        <my-reportfile visible="true"
+                       visibledelete="true"
+                       visibledownload="true"
+                       typereport="typicalreport"
+                       isuser="false"
+                       idfiletype="78">
+        </my-reportfile>
+        <br />
+    </div>
+
+</div>

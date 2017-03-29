@@ -1,0 +1,26 @@
+﻿<div ng-show="VisibleFilterContractsForCheck">
+
+    <div>
+        <timer interval="45000" ng-show="false" />
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Договоры, готовые к проверке СБ
+        </div>
+        <div class="panel-body">
+            <div ng-show="processing['loadContractsForCheck']">
+                <my-progressbar message="{{message}}"
+                                visible="true"
+                                typebar="Leonardo" />
+                <br />
+            </div>
+            <div>
+                <h3>загружено {{contracts.length}} договоров</h3>
+            </div>
+            <div>
+                <my-contracttable contracts="contracts" />
+            </div>
+        </div>
+    </div>
+</div>

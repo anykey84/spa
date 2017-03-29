@@ -1,0 +1,41 @@
+﻿<div class="alert-messages">
+
+    <div>
+        <timer interval="60000" ng-show="false" />
+    </div>
+
+    <div ng-show="processing['loadNewTasks']" style="height: 50px;">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="Leonardo" />
+        <br />
+    </div>
+
+    <div ng-show="!processing['loadNewTasks']">
+
+        <div ng-show="newtasks.length || oldtasks.length" class="bg-danger" id="new-tasks">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 text-center">
+                    <a href="#/Task">
+                        Необработанные заявки
+                        <span class="badge" style="background-color: red;">{{newtasks.length}}</span>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-6 text-center">
+                    <a href="#/Task">
+                        Просроченные заявки
+                        <span class="badge" style="background-color: red;">{{oldtasks.length}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="!issmall" class="alert alert-warning">
+            <my-report-profile-penalty isload="false" /> <!--isload="!issmall"-->
+        </div>
+
+    </div>
+
+
+</div>

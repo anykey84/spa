@@ -1,0 +1,33 @@
+﻿<div ng-show="messages != null && messages.length != 0">
+    <button class="btn btn-warning btn-xs"
+            ng-click="messages.length = 0">
+        очистить список ошибок
+    </button>
+    <br />
+    <br />
+
+    @*type: 'danger',
+        type: 'success',*@
+
+    <div ng-repeat="alert in messages" class="alert alert-{{alert.color === 'red' ? 'danger' : 'success'}}"
+           close="messages.splice($index, 1);">{{alert.message}}</div>
+
+    @*<table class="table"
+               ng-show="visibleTable"
+               ng-init="visibleTable = true">
+            <thead>
+            <th>сообщение</th>
+            <th>код ошибки</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in messages">
+                    <td ng-style="{'background-color':item.color}">{{item.message}}</td>
+                    <td ng-style="{'background-color':item.color}">{{item.code}}</td>
+                </tr>
+            </tbody>
+        </table>*@
+
+    @*<button ng-click="visibleTable = !visibleTable">скрыть предупреждение</button>*@
+
+
+</div>

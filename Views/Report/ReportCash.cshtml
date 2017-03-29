@@ -1,0 +1,30 @@
+﻿
+<div ng-init="visiblereportcash = false;">
+        <button class="btn btn-default btn-block"
+                ng-show="!visiblereportcash"
+                ng-click="visiblereportcash = !visiblereportcash; visibleClick(visiblereportcash);"><span class="glyphicon glyphicon-file"></span>&nbsp;
+            Cоздать отчет по кассе
+        </button>
+
+        <div class="panel panel-primary" ng-show="visiblereportcash">
+
+            <div class="panel-heading">Отчет по кассе</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label for="idvisiblereportcash" class="col-sm-2 control-label">выберите дату</label>
+                        <div class="col-sm-10">
+                            <input type="date"
+                                   class="form-control"
+                                   id="idvisiblereportcash"
+                                   ng-model="dateReport.date" />
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success btn-sm" ng-click="generateReport();">Сгенерировать</button>
+                    <button class="btn btn-danger btn-sm" ng-click="visiblereportcash = !visiblereportcash; visibleClick(visiblereportcash); ">Закрыть</button>
+                </div>
+            </div>
+        </div>
+</div>

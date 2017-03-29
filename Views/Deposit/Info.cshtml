@@ -1,0 +1,49 @@
+﻿<div>
+    <my-alert-messages isload="true" />
+</div>
+
+<div>
+    <a href="#/Contract">назад</a>
+</div>
+<br />
+<br />
+
+<legend>№ {{contract.number}} от {{contract.dateCreate | dateFormatLong}} - {{contract.owner}} ({{contract.lastStatus}})</legend>
+
+<div class="btn-group btn-group-justified">
+    <div class="btn-group">
+        <button class="btn btn-primary" ng-show="VisibleTabDeposit_LoanInfo" ng-click="panelId = 'depositinfo'">Сведения о вкладе</button>
+    </div>
+    <div class="btn-group">
+        <button class="btn btn-primary" ng-show="VisibleTabDeposit_Payment" ng-click="panelId = 'payment'">Платежи</button>
+    </div>
+    <div class="btn-group">
+        <button class="btn btn-primary" ng-show="VisibleTabDeposit_Status" ng-click="panelId = 'status'">Статусы</button>
+    </div>
+    <div class="btn-group">
+        <button class="btn btn-primary" ng-show="VisibleTabDeposit_Task" ng-click="panelId = 'task'">Задачи</button>
+    </div>
+</div>
+<br />
+<ng-include src="depositInfoPanelUrl">
+</ng-include>
+
+<br />
+<br />
+
+<div>
+    <my-personfile idcontract="contract.id"
+                   idpersondocument="null"
+                   idpayment="null"
+                   visible="true"
+                   isdeposit="true"
+                   visibleupload="true"
+                   visiblescanupload="true"
+                   visiblegeneratedepositgraphic="true"
+                   visiblegeneratedepositcontract="true"
+                   visiblegeneratedepositcontractprolongation="true"
+                   visibledelete="VisibleButtonDeleteFileContract"
+                   visibledownload="VisibleButtonDownloadFileContract" />
+</div>
+
+

@@ -1,0 +1,133 @@
+﻿<div>
+    <legend>связывание пользователей и ролей</legend>
+
+    <div ng-show="processing['loadRoles']
+               || processing['loadProfiles']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+        <br />
+    </div>
+
+    <div ng-show="!processing['loadRoles']
+               && !processing['loadProfiles']">
+
+        <table class="table borderless">
+            <thead>
+            <th>пользователи</th>
+            <th>выбранные роли</th>
+            <th>роли</th>
+            </thead>
+            <tr>
+                <td width="33%">
+                    <div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"
+                                           placeholder="введите текст для поиска"
+                                           ng-change="index = null;"
+                                           ng-model="findprofile" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table borderless">
+                            <tr ng-repeat="item in (filteredProfiles = (profiles | filter: findprofile))"
+                                ng-click="$parent.idProfile = item.id; $parent.index = $index; loadProfileRoles(item.id);"
+                                ng-class='{selected: $index == $parent.index}'>
+                                <td>{{item.profileFullName}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </td>
+
+                <td width="33%">
+
+                    <div>
+                        <div ng-show="processing['loadProfileRoles']
+                               || processing['delProfileRole']
+                               || processing['addProfileRole']">
+
+                            <my-progressbar message="{{message}}"
+                                            visible="true"
+                                            typebar="circle" />
+                            <br />
+                        </div>
+
+                        <div ng-show="!processing['loadProfileRoles']
+                                && !processing['delProfileRole']
+                                && !processing['addProfileRole']">
+
+                            <div>
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control"
+                                                   placeholder="введите текст для поиска"
+                                                   ng-model="findprofilerole" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table borderless">
+                                    <tr ng-repeat="item in (filteredProfileRoles = (profileroles | filter: findprofilerole))">
+                                        <td>{{item.name}}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"
+                                                    ng-click="delProfileRole(item)">
+                                                удалить
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+
+                <td width="33%">
+                    <div>
+                        <div ng-show="processing['addProfileRole']">
+                            <my-progressbar message="{{message}}"
+                                            visible="true"
+                                            typebar="circle" />
+                            <br />
+                        </div>
+
+                        <div ng-show="!processing['addProfileRole']">
+                            <div>
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control"
+                                                   placeholder="введите текст для поиска"
+                                                   ng-model="findrole" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table borderless">
+                                    <tr ng-repeat="item in (filteredRoles = (roles | filter: findrole))">
+                                        <td>{{item.name}}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"
+                                                    ng-click="addProfileRole(item.id)">
+                                                добавить
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,176 @@
+﻿<div>
+    <legend>роли</legend>
+
+    <div ng-show="processing['loadRoles']
+                || processing['loadRoleProperties']
+                || processing['delRole']
+                || processing['addRole']">
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+    </div>
+
+
+
+    <div ng-show="!processing['loadRoles']
+                && !processing['loadRoleProperties']
+                && !processing['delRole']
+                && !processing['addRole']">
+
+
+        <button class="btn btn-primary btn-sm" ng-init="visibleFormAdd = false;" ng-click="visibleFormAdd = !visibleFormAdd;">
+            добавить роль
+        </button>
+
+        <div ng-show="visibleFormAdd">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="idrolename" class="col-sm-2 control-label">название роли</label>
+                    <div class="col-sm-10">
+                        <input type="text"
+                               class="form-control"
+                               id="idrolename"
+                               ng-model="name" />
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <button class="btn btn-primary btn-sm" ng-click="visibleFormAdd = false;">отмена</button>
+                    <button class="btn btn-primary btn-sm" ng-click="visibleFormAdd = false; addRole();">сохранить</button>
+                </div>
+            </div>
+        </div>
+
+        <table class="table borderless">
+            <thead>
+            <th>роли</th>
+            <th>шаблон роли</th>
+            <th>свойства ролей</th>
+            </thead>
+            <tr>
+                <td width="33%">
+                    <div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"
+                                           placeholder="введите текст для поиска"
+                                           ng-change="index = null;"
+                                           ng-model="findrole" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table borderless">
+                            <tr ng-repeat="item in (filteredRoles = (roles | filter: findrole))"
+                                ng-click="$parent.idRole = item.id; $parent.index = $index; loadRoleTemplates(item.id);"
+                                ng-class='{selected: $index == $parent.index}'>
+                                <td>{{item.name}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm"
+                                            ng-click="delRole(item.id)">
+                                        удалить
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </td>
+
+                <td width="33%">
+
+                    <div>
+                        <div ng-show="processing['loadRoleTemplates']
+                               || processing['delRoleTemplate']
+                               || processing['addRoleTemplate']">
+
+                            <my-progressbar message="{{message}}"
+                                            visible="true"
+                                            typebar="circle" />
+                            <br />
+                        </div>
+
+                        <div ng-show="!processing['loadRoleTemplates']
+                                && !processing['delRoleTemplate']
+                                && !processing['addRoleTemplate']">
+
+                            <div>
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control"
+                                                   placeholder="введите текст для поиска"
+                                                   ng-model="findroletemplate" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table borderless">
+                                    <tr ng-repeat="item in (filteredRoleTemplates = (roletemplates | filter: findroletemplate))">
+                                        <td>
+                                            <div>
+                                                {{item.rolePropertyDescription}} ({{item.rolePropertyName}})
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"
+                                                    ng-click="delRoleTemplate(item)">
+                                                удалить
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+
+                <td width="33%">
+                    <div>
+                        <div ng-show="processing['addRoleTemplate']">
+                            <my-progressbar message="{{message}}"
+                                            visible="true"
+                                            typebar="circle" />
+                            <br />
+                        </div>
+
+                        <div ng-show="!processing['addRoleTemplate']">
+                            <div>
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control"
+                                                   placeholder="введите текст для поиска"
+                                                   ng-model="findroleproperty" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table borderless">
+                                    <tr ng-repeat="item in (filteredRoleProperties = (roleproperties | filter: findroleproperty))">
+                                        <td>{{item.name}}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"
+                                                    ng-click="addRoleTemplate(item.id)">
+                                                добавить
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+
+
+
+    </div>
+
+</div>

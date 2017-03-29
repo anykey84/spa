@@ -1,0 +1,43 @@
+﻿<div ng-init="visibleMainPart = false">
+    <button class="btn btn-default btn-block" ng-show="!visibleMainPart" ng-click="visibleMainPart = !visibleMainPart">
+        <span class="glyphicon glyphicon-rub"></span>&nbsp;
+        Выдача зарплаты
+    </button>
+
+    <div class="panel panel-primary" ng-show="visibleMainPart">
+        <div class="panel-heading">Выдача зарплаты</div>
+        <div class="panel-body">
+            <div ng-show="processing['loadProfiles'] || processing['addPaymentSalary']">
+                <my-progressbar message="{{message}}"
+                                visible="true"
+                                typebar="leonardo" />
+                <br />
+                <div>
+                    <my-servermessages messages="messages" />
+                </div>
+            </div>
+            <div ng-show="!(processing['loadProfiles'] && processing['addPaymentSalary'])" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <form>
+                    <div class="form-group">
+                        <label class="control-label">Выберите сотрудника</label>
+                        <select ng-model="selectedProfile"
+                                ng-options="item as item.profileFullName for item in profiles | orderBy: 'profileFullName'"
+                                ng-change="profileSelect()"
+                                class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Сумма платежа</label>
+                        <input type="number" ng-model="sum" class="form-control" min="0" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Дата платежа</label>
+                        <input type="date" ng-model="datePay" class="form-control" />
+                    </div>
+                </form>
+
+                <button class="btn btn-success" ng-show="visibleMainPart" ng-click="addPaymentSalary();">Создать</button>
+                <button class="btn btn-danger" ng-show="visibleMainPart" ng-click="visibleMainPart = !visibleMainPart">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>

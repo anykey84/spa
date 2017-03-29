@@ -1,0 +1,46 @@
+﻿<div>
+
+    <legend>анализ телефонов</legend>
+
+    <button class="btn btn-primary btn-sm" ng-click="phoneAnalysis();">запустить</button>
+
+    <div ng-show="processing['phoneAnalysis']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+        <br />
+    </div>
+
+
+    <table class="table table-striped table-condensed table-hover">
+        <thead>
+        <th>телефон</th>
+        <th>комментарий</th>
+        <th>удален</th>
+        <th>фио</th>
+        <th>договор</th>
+        <th>статус</th>
+        <th>кол-во дней просрочки</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in phoneanalysis">
+                <td>{{item.phone}}</td>
+                <td>{{item.comment}}</td>
+                <td>
+                    @*{{item.deleted}}*@
+                    <p ng-show="item.deleted">удален</p>
+                </td>
+                <td>
+                    <a href="#/Person/Info/{{item.id_Person}}">{{item.fullNamePerson}}</a>
+                </td>
+                <td>
+                    <a href="#/Contract/Info/{{item.id_Contract}}">{{item.contractNumber}}</a>
+                </td>
+                <td>{{item.lastStatus}}</td>
+                <td>{{item.overdueDaysCount}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

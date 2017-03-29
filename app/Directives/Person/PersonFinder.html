@@ -1,0 +1,62 @@
+﻿<div>
+    <div>
+        <my-progressbar ng-show="processing['findPersons']"
+                        message="{{message}}"
+                        visible="true"
+                        typebar="line"></my-progressbar>
+        <div>
+            <my-servermessages messages="messages">
+            </my-servermessages>
+        </div>
+    </div>
+    <div ng-show="!processing['findPersons']">
+        <h3>Введите данные для поиска физического лица</h3>
+
+        <div class="row">
+            <label class="col-sm-2 control-label">Поиск по ФИО</label>
+            <div class="col-sm-10 ">
+                <div class="input-group">
+                    <input ng-model="fullName"
+                           type="text"
+                           class="form-control"
+                           ng-enter="findPerson(fullName)" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" ng-click="findPerson(fullName)">поиск</button>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <br />
+        <div ng-show="persons.length != 0">
+            <h3>Выберите нужного клиента из списка</h3>
+            <div style="overflow-x:hidden; overflow-y:'auto'; max-height:300px">
+                <table class="table table-condensed table-hover table-bordered">
+                    <thead>
+                    <th>фамилия</th>
+                    <th>имя</th>
+                    <th>отчество</th>
+                    <th>дата рождения</th>
+                    <th>серия паспорта</th>
+                    <th>номер паспорта</th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in persons" ng-click="selectPerson(item);">
+                            <!--<td>{{item.id}}</td>-->
+                            <td>{{item.lastName}}</td>
+                            <td>{{item.firstName}}</td>
+                            <td>{{item.middleName}}</td>
+                            <td>{{item.dateBirth | date:'dd.MM.yyyy'}}</td>
+                            <td>{{item.seria}}</td>
+                            <td>{{item.number}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="!_.isNil(selectedPerson) && selectedPerson != {}">
+                <h3>Выбран клиент: {{selectedPerson.stringValue}}</h3>
+            </div>
+        </div>
+    </div>
+</div>

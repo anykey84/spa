@@ -1,0 +1,158 @@
+﻿<div init="visibleCashRests = false">
+
+    <button class="btn btn-block btn-default"
+            ng-show="!visibleCashRests"
+            ng-click="visibleCashRests = !visibleCashRests">
+        <span class="glyphicon glyphicon-piggy-bank"></span>
+        Остатки по кассе
+    </button>
+
+
+    <div ng-show="visibleCashRests">
+        <h3>
+            Остатки по кассе
+        </h3>
+        <my-servermessages messages="serverMessages"></my-servermessages>
+
+        <div ng-show="processing['loadCashRests']">
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="line">
+            </my-progressbar>
+        </div>
+
+        <br />
+        <div ng-show="!processing['loadCashRests']">
+            <div class="input-group"
+                 ng-show="!processing['loadCashRests']">
+                <span class="input-group-addon">Выберите дату</span>
+                <input type="date"
+                       class="form-control"
+                       aria-describedby="basic-addon1"
+                       ng-model="restsDate"
+                       model-view-converter="dateToString" />
+            </div>
+
+            <br />
+            <div>
+                <button class="btn btn-sm btn-primary"
+                        type="button"
+                        ng-click="loadCashRests();">
+                    Показать остатки
+                </button>
+            </div>
+            <br />
+            <div>
+                <button class="btn btn-sm btn-primary"
+                        type="button"
+                        ng-click="recalcCashRestsAll();">
+                    <span class="glyphicon glyphicon-repeat"></span>
+                    Пересчитать все остатки, начиная с даты {{restsDate}}
+                </button>
+
+            </div>
+            <br />
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+             ng-show="restsTableVisible()">
+            <table class="table table-hover table-condensed col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <thead>
+                    <tr>
+                        <th>Регион</th>
+                        <th>Офис</th>
+                        <th>Остаток на начало дня</th>
+                        <th>Норма Лимита</th>
+                        <th>Приход</th>
+                        <th>Расход</th>
+                        <th>Остаток на конец дня дня</th>
+                        <th>Перелимит касс</th>
+                        <th
+                            colspan="3"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in rests | orderObjectBy:['officeRestParentName','officeRestName']" ng-init="item.editSum_CashRest = false">
+                        <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2">{{item.officeRestParentName}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">{{item.officeRestName}}</td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            <div ng-show="item.editSum_CashRest && !item.updateCashRest">
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="item.sum_CashRestMorning"
+                                       ng-pattern="/\d+(?:(\.|\,)\d){0,2}/" />
+                            </div>
+
+                            <div ng-show="!item.editSum_CashRest && !item.updateCashRest">
+                                {{item.sum_CashRestMorning}}
+                            </div>
+                            <div ng-show="item.updateCashRest">
+                                <my-progressbar message="{{item.updateMessage}}"
+                                                typebar="line"
+                                                visible="true" />
+                            </div>
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            {{item.sum_CashLimit}}
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            {{item.sum_PKO}}
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            {{item.sum_RKO}}
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            {{item.sum_CashRestEvening}}
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            {{item.sum_CashOverLimit}}
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            <button ng-show="item.editSum_CashRest && !item.updateCashRest"
+                                    type="button"
+                                    class="btn btn-primary"
+                                    tooltip="Сохранить"
+                                    tooltip-placement="top"
+                                    ng-click="updateCashRest(item)">
+                                <span class="glyphicon glyphicon-ok"> </span>
+                            </button>
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            <button ng-show="!item.updateCashRest"
+                                    type="button"
+                                    class="btn btn-primary"
+                                    tooltip="Редактировать"
+                                    tooltip-placement="top"
+                                    ng-click="editSum_CashRest(item)">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                            <button ng-show="!item.updateCashRest"
+                                    type="button"
+                                    class="btn btn-primary"
+                                    tooltip="Пересчитать следующие"
+                                    tooltip-placement="top"
+                                    ng-click="recalcCashRest(item)">
+                                <span class="glyphicon glyphicon-repeat"></span>
+                            </button>
+                        </td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <br />
+
+        <button class="btn btn-sm btn-primary"
+                ng-show="visibleCashRests"
+                ng-click="visibleCashRests = !visibleCashRests">
+            Закрыть
+        </button>
+        <br />
+        <br />
+        <br />
+    </div>
+
+</div>

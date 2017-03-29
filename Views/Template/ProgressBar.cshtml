@@ -1,0 +1,27 @@
+﻿<div class="my-progress-bar">
+    <div ng-show="visible" ng-model="visible" ng-change='changeHandler(visible)' style="display: flex; align-items: center">
+
+        <div ng-show="visiblecircle">
+            <img src="~/Content/img/ajax-loader-circle.gif" />
+        </div>
+        <div ng-show="visibleline">
+            <img src="~/Content/img/ajax-loader.gif" />
+        </div>
+        <div ng-show="visiblecheck">
+            <img src="~/Content/img/check.png" />
+        </div>
+        <div ng-show="visibleLeonardo">
+            <img src="~/Content/img/Leonardo.gif" />
+        </div>
+
+        <p>
+            {{message}}
+        </p>
+    </div>
+
+    <div ng-show="error">
+        <p>
+            ошибка загрузки, повторите попытку
+        </p>
+    </div>
+</div>

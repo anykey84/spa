@@ -1,0 +1,305 @@
+﻿<div>
+    <legend>документы</legend>
+
+    <div>
+        <div ng-show="processing['loadDocuments']
+                    || processing['loadTypeParameters']
+                    || processing['loadDocumentPropertyArrays']
+                    || processing['addDocument']">
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="line" />
+            <br />
+        </div>
+
+        <div>
+            <my-servermessages messages="messages" />
+        </div>
+    </div>
+
+
+
+    <div ng-show="!processing['loadDocuments']
+                            && !processing['loadTypeParameters']
+                            && !processing['loadDocumentPropertyArrays']
+                            && !processing['addDocument']">
+
+        <button class="btn btn-primary btn-sm"
+                ng-init="visibleFormAdd = false;"
+                ng-click="visibleFormAdd = !visibleFormAdd;">
+            добавить документ
+        </button>
+
+        <div ng-show="visibleFormAdd">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">название документа</label>
+                    <div class="col-sm-8">
+                        <input type="text"
+                               class="form-control"
+                               ng-model="newDocument.name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">кол-во</label>
+                    <div class="col-sm-8">
+                        <input type="number"
+                               class="form-control"
+                               ng-model="newDocument.count" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+                <div>
+                    <button class="btn btn-primary btn-sm" ng-click="visibleFormAdd = false;">отмена</button>
+                    <button class="btn btn-primary btn-sm" ng-click="visibleFormAdd = false; addDocument();">сохранить</button>
+                </div>
+            </div>
+        </div>
+
+        <table class="table borderless">
+            <thead>
+            <th>документы</th>
+            <th>шаблон документа</th>
+            @*<th>свойства ролей</th>*@
+            </thead>
+            <tr>
+                <td width="33%">
+                    <div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"
+                                           placeholder="введите текст для поиска"
+                                           ng-change="index = null;"
+                                           ng-model="finddocument" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table borderless">
+                            <tr ng-repeat="item in (filteredDocuments = (documents | filter: finddocument))"
+                                ng-click="$parent.idDocument = item.id; $parent.index = $index; loadDocumentTemplates(item.id);"
+                                ng-class='{selected: $index == $parent.index}'>
+                                <td>{{item.name}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm"
+                                            ng-click="delRole(item.id)">
+                                        удалить
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </td>
+
+                <td width="33%">
+
+                    <div>
+                        <div ng-show="processing['loadDocumentTemplates']
+                                           || processing['addDocumentTemplate']
+                                           || processing['addRoleTemplate']">
+
+                            <my-progressbar message="{{message}}"
+                                            visible="true"
+                                            typebar="circle" />
+                            <br />
+                        </div>
+
+                        <div ng-show="!processing['loadDocumentTemplates']
+                                            && !processing['addDocumentTemplate']
+                                            && !processing['addRoleTemplate']">
+
+                            <div>
+                                <input type="text" class="form-control"
+                                       placeholder="введите текст для поиска"
+                                       ng-model="finddocumenttemplate" />
+
+                                <br />
+
+                                <div ng-init="visibleFormAddDocumentTemplate = false;"
+                                     ng-show="!visibleFormAddDocumentTemplate">
+                                    <button class="btn btn-primary btn-sm"
+                                            ng-click="visibleFormAddDocumentTemplate = !visibleFormAddDocumentTemplate">
+                                        добавить свойство
+                                    </button>
+                                    <br />
+                                    <br />
+                                </div>
+
+                                <div ng-show="visibleFormAddDocumentTemplate" class="form-horizontal">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">имя свойства</label>
+                                        <div class="col-sm-8">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder="введите имя свойства"
+                                                   ng-model="newDocumentTemplate.name" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">тип</label>
+                                        <div class="col-sm-8">
+                                            <select ng-model="newDocumentTemplate.selectTypeParameter"
+                                                    ng-init="newDocumentTemplate.idTypeParameter = null"
+                                                    ng-change="newDocumentTemplate.idTypeParameter = newDocumentTemplate.selectTypeParameter.id"
+                                                    class="form-control"
+                                                    ng-options="t as t.name for t in typeparameters"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">сортировочный номер</label>
+                                        <div class="col-sm-8">
+                                            <input type="number"
+                                                   class="form-control"
+                                                   ng-model="newDocumentTemplate.orderNumber" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">описание</label>
+                                        <div class="col-sm-8">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   placeholder="введите описание свойства"
+                                                   ng-model="newDocumentTemplate.description" />
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-primary btn-sm"
+                                            ng-click="addDocumentTemplate();">
+                                        сохранить
+                                    </button>
+
+                                    <button class="btn btn-primary btn-sm"
+                                            ng-click="visibleFormAddDocumentTemplate = !visibleFormAddDocumentTemplate; initTask();">
+                                        отмена
+                                    </button>
+                                    <br />
+                                    <br />
+                                </div>
+
+
+
+
+                                <table class="table borderless">
+                                    <tr ng-class="$index % 2 == 0 ? 'bg-success' : 'bg-warning'"
+                                        ng-repeat-start="item in (filteredDocumentTemplates = (documenttemplates | filter: finddocumenttemplate))"
+                                        ng-click="$parent.selectDocumentIndex = $index;">
+                                        <td>
+                                            <div>
+                                                <b>{{item.documentPropertyName}}</b>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div>
+                                                <select ng-model="item.selectTypeParameter"
+                                                        class="form-control"
+                                                        ng-options="t as t.name for t in typeparameters"></select>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"
+                                                    ng-click="delRoleTemplate(item)">
+                                                удалить
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-if="item.id_TypeParameter == 6"
+                                        ng-class="$index % 2 == 0 ? 'success' : 'warning'">
+                                        <td colspan="3">
+
+                                            <div class="col-lg-6">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" ng-model="item.newArrayValue">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" ng-click="addDocumentPropertyArray(item)" type="button">Add</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @*<div class="input-group">
+                                                    <input type="text" class="form-control" ng-model="item.newArrayValue">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary btn-sm"
+                                                                ng-click="addDocumentPropertyArray(item)">
+                                                            добавить
+                                                        </button>
+                                                    </span>
+                                                </div>*@
+
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-repeat-end
+                                        ng-if="item.id_TypeParameter == 6"
+                                        ng-class="$index % 2 == 0 ? 'success' : 'warning'">
+                                        <td colspan="3">
+                                            <div ng-repeat="ar in item.arrays">
+                                                {{ar.arrayValue}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+
+                @*<td width="33%">
+                        <div>
+                            <div ng-show="processing['addRoleTemplate']">
+                                <my-progressbar message="{{message}}"
+                                                visible="true"
+                                                typebar="circle" />
+                                <br />
+                            </div>
+
+                            <div ng-show="!processing['addRoleTemplate']">
+                                <div>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"
+                                                       placeholder="введите текст для поиска"
+                                                       ng-model="findroleproperty" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <table class="table borderless">
+                                        <tr ng-repeat="item in (filteredRoleProperties = (roleproperties | filter: findroleproperty))">
+                                            <td>{{item.name}}</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm"
+                                                        ng-click="addRoleTemplate(item.id)">
+                                                    добавить
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </td>*@
+
+            </tr>
+        </table>
+
+
+
+    </div>
+
+</div>
+

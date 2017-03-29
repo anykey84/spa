@@ -1,0 +1,60 @@
+﻿<div ng-init="visibleformscanupload = false;" ng-show="visible">
+    @*<input type="file"
+        ng-file-select="onFileSelect($files)"
+        multiple
+        >*@
+
+    @*<div ng-show="true">
+            <p ng-model="refresh.guid" ng-change="refreshData()">fff - {{refresh.guid}}</p>
+        </div>*@
+
+    <div ng-show="processing['loadPersonFile']
+                || processing['generateReport']
+                || processing['loadOffices']
+                || processing['delPerson_File']">
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="leonardo" />
+    </div>
+
+    <div ng-show="!processing['loadPersonFile']
+                && !processing['generateReport']
+                && !processing['loadOffices']
+                && !processing['delPerson_File']">
+
+        <div>
+            <ng-include src="editTemplates[typereport]">
+            </ng-include>
+        </div>
+
+
+        <table class="table table-striped table-condensed table-hover" ng-show="personfiles.length != 0">
+            <thead>
+            <tr>
+                <th>Дата создания</th>
+                <th>Пользователь</th>
+                <th>Файл</th>
+                <th ng-show="visibledownload">&nbsp;</th>
+                <th ng-show="visibledelete">&nbsp;</th>
+                @*<th>Тип файла</th>*@
+            </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="y in personfiles | orderBy:'id_Person_File':true">
+                    @*<td>{{y.id_Person_File}} + ' - ' + {{y.fileName}}</td>*@
+                    <td>{{y.dateCreate}}</td>
+                    <td>{{y.profileFullName}}</td>
+                    @*<td>{{item.profileShortName}}</td>*@
+                    <td>{{y.fileDisplayName}} ({{y.fileName}})</td>
+                    <td ng-show="visibledownload">
+                        <a target="_blank" href="/File/Download/{{y.id_Person_File}}" title="Скачать" class="lead"><span class="glyphicon glyphicon-save"></span></a>
+                    </td>
+                    <td ng-show="visibledelete">
+                        <a style="cursor: pointer" ng-click="delPerson_File(y.id_Person_File)" title="Удалить" class="text-danger lead"><span class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                    @*<td>{{y.id_FileType}}</td>*@
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

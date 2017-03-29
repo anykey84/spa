@@ -1,0 +1,223 @@
+﻿<div>
+    <legend>офисы</legend>
+
+    <div ng-show="processing['loadOffices']
+                || processing['addOffice']
+                || processing['loadOfficeTypes']
+                || processing['loadFindOffices']
+                || processing['addOffice']
+                || processing['delOfice']">
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+    </div>
+
+
+
+    <div ng-show="!processing['loadOffices']
+                && !processing['addOffice']
+                && !processing['loadOfficeTypes']
+                && !processing['loadFindOffices']
+                && !processing['addOffice']
+                && !processing['delOfice']">
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="введите текст для поиска" ng-model="find" />
+                </div>
+            </div>
+        </div>
+
+        @*<button class="btn btn-primary btn-sm" ng-click="loadFindOffices()">
+            поиск
+        </button>*@
+
+        <br />
+        <br />
+
+        <button class="btn btn-primary btn-sm"
+                ng-show="!visibleFormAdd"
+                ng-init="visibleFormAdd = false;" ng-click="visibleFormAdd = !visibleFormAdd; init(null);">
+            добавить офис
+        </button>
+
+        <div ng-show="visibleFormAdd">
+
+            <legend>добавление (редактирование) офиса</legend>
+
+            <table class="table borderless">
+                <tr>
+                    <td class="col-md-2">
+                        <label class="control-label">название</label>
+                    </td>
+                    <td class="col-md-12">
+                        <input type="text"
+                               class="form-control"
+                               ng-model="name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-2">
+                        <label class="control-label">выберите регион</label>
+                    </td>
+                    <td class="col-md-12">
+                        <select ng-model="selectParent"
+                                ng-options="item as item.name for item in officeregions"
+                                class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-2">
+                        <label class="control-label">выберите тип офиса</label>
+                    </td>
+                    <td class="col-md-12">
+                        <select ng-model="selectOfficeType"
+                                ng-options="item as item.name for item in officetypes"
+                                class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-2">
+                        <label class="control-label">номер судебного участка</label>
+                    </td>
+                    <td class="col-md-12">
+                        <input type="text"
+                               class="form-control"
+                               ng-model="judgeNumber" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-2">
+                        <label class="control-label">судебный участок</label>
+                    </td>
+                    <td class="col-md-12">
+                        <input type="text"
+                               class="form-control"
+                               ng-model="juridicalRegion" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-2">
+                        <label class="control-label">адрес</label>
+                    </td>
+                    <td class="col-md-12">
+                        <div>
+                            <my-address address="address" visiblebutton="false" idaddress="address.id_Address" id="0" type="office" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            @*<div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">название</label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">выберите регион</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selectParent"
+                                    ng-options="item as item.name for item in offices"
+                                    class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">выберите тип офиса</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selectOfficeType"
+                                    ng-options="item as item.name for item in officetypes"
+                                    class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">номер судебного участка</label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="judgeNumber" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">судебный участок</label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   class="form-control"
+                                   ng-model="juridicalRegion" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">адрес</label>
+                        <div class="col-sm-10">
+                            <my-address class="form-control" idaddress="0" id="0" type="office" />
+                        </div>
+                    </div>
+                </div>*@
+
+            <div>
+                <div>
+                    <button class="btn btn-primary btn-sm"
+                            ng-click="visibleFormAdd = false; init(null);">
+                        отмена
+                    </button>
+                    <button class="btn btn-primary btn-sm"
+                            ng-click="visibleFormAdd = false; saveOffice(); init(null);">
+                        сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+        <table class="table table-striped table-condensed table-hover" ng-show="!visibleFormAdd">
+            <thead>
+            <th>номер</th>
+            <th>название</th>
+            <th>регион</th>
+            @*<th>адрес</th>*@
+            <th>тип</th>
+            <th>номер суд.участка</th>
+            <th>суд.участок</th>
+            <th>-</th>
+            <th>-</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in (filteredOffices = (findoffices | filter: find))">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.parentName}}</td>
+                    @*<td>{{item.id_Address}}</td>*@
+                    <td>{{item.officeTypeName}}</td>
+                    <td>{{item.judgeNumber}}</td>
+                    <td>{{item.juridicalRegion}}</td>
+                    <td>
+                        <button class="btn btn-primary btn-block btn-sm"
+                                ng-click="$parent.visibleFormAdd = true; init(item); ">
+                            редактировать
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-block btn-sm"
+                                ng-click="deleteOffice(item.id);">
+                            удалить
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

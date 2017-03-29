@@ -1,0 +1,92 @@
+﻿<div ng-show="isVisible" class="panel panel-primary">
+    <div class="panel-heading">Учёт рабочего времени</div>
+    <div class="panel-body">
+        <div>
+            <div ng-show="processing['load']
+             || processing['loadTimeControlErrors']">
+
+                <my-progressbar message="{{message}}"
+                                visible="true"
+                                typebar="Leonardo" />
+                <br />
+            </div>
+
+            <div>
+                <my-servermessages messages="messages" />
+            </div>
+
+            <div ng-show="!processing['load']
+             && !processing['loadTimeControlErrors']">
+
+                <div ng-show="timecontrols.length != 0">
+                    <table class="table table-striped table-condensed table-hover">
+                        <thead>
+                        <th>время</th>
+                        <th>тип события</th>
+                        <th>комментарий</th>
+                        <th>торговая точка</th>
+                        @*<th>-</th>*@
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in timecontrols">
+                                <td>
+                                    <div>
+                                        начало: {{item.dateInCreate | dateFormatLong}}
+                                        <br />
+                                        завершение: {{item.dateOutCreate | dateFormatLong}}
+                                    </div>
+                                </td>
+                                <td>{{item.timeControlTypeName}}</td>
+                                <td>
+                                    <div>
+                                        начало: {{item.commentIn}}
+                                        <br />
+                                        завершение: {{item.commentOut}}
+                                    </div>
+                                </td>
+
+                                <td>{{item.officeName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+                <table>
+                    <tr>
+
+                        <td width="50%">
+
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-3 control-label text-left">Комментарий</div>
+                                    <div class="col-sm-9">
+                                        <input type="text"
+                                               ng-model="comment"
+                                               class="form-control" />
+                                    </div>
+                                </div>
+
+
+                                <button class="btn btn-primary btn-sm"
+                                        ng-show="isFirst"
+                                        ng-click="idTimeControlType = 1; addTimeControl();">
+                                    пришел на работу
+                                </button>
+
+                                <button class="btn btn-danger btn-sm"
+                                        ng-show="isSecond"
+                                        ng-click="idTimeControlType = 2; addTimeControl();">
+                                    ушёл с работы
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    
+</div>

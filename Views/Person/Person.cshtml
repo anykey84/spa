@@ -1,0 +1,7 @@
+﻿<div>
+
+    <legend ng-show="!personinfo.isJuridical">ФИО: {{personinfo.lastName}} {{personinfo.firstName}} {{personinfo.middleName}},  дата рождения: {{personinfo.dateBirth | date:'dd.MM.yyyy'}}</legend>
+
+    <legend ng-show="personinfo.isJuridical">Наименование {{personinfo.name}}, ИНН {{personinfo.inn}}, ОГРН {{personinfo.ogrn}}</legend>
+
+</div>

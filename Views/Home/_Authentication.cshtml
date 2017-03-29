@@ -1,0 +1,29 @@
+﻿<style>
+    body {
+            background-image: @ViewBag.background;
+        }
+    .container{
+        background-color: transparent;
+        display: flex;
+        -webkit-box-shadow: none;
+	    -moz-box-shadow: none;
+	    box-shadow: none;
+    }
+</style>
+<div id="loginPanel">
+    @*<section id="localLoginPanel">*@
+    <h2 class="text-center">Вход</h2>
+    @Html.Partial("_Login")
+    @*</section>*@
+    @*<section id="socialLoginPanel">
+            <h2>Log in using another service</h2>
+            @Html.Action("ExternalLoginsList", "Account", new { ReturnUrl = ViewBag.ReturnUrl })
+        </section>*@
+    @*<a id="showRegister">регистрация</a>*@
+</div>
+
+@*<div id="registerPanel">
+     <h2>регистрация</h2>
+    @Html.Partial("_Register") 
+    <a id="showLogin">вход</a>
+</div>*@

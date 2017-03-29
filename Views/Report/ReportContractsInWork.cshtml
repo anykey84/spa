@@ -1,0 +1,22 @@
+﻿<div ng-init="visiblereportcontractsinwork = false;">
+    <div>
+        <button class="btn btn-primary btn-sm"
+                ng-show="!visiblereportcontractsinwork"
+                ng-click="visiblereportcontractsinwork = !visiblereportcontractsinwork; visibleClick(visiblereportcontractsinwork);">
+            отчет по просрочкам
+        </button>
+
+        <div ng-show="visiblereportcontractsinwork">
+
+            <legend>отчет по просрочкам</legend>
+
+            <div ng-show="visiblereportcontractsinwork">
+                @*<p>выберите дату</p>
+                    <input ng-model="dateReport.date" type="date" />*@
+                <button class="btn btn-primary btn-sm" ng-click="generateReport();">сгенерировать</button>
+            </div>
+            <br />
+            <button class="btn btn-primary btn-sm" ng-click="visiblereportcontractsinwork = !visiblereportcontractsinwork; visibleClick(visiblereportcontractsinwork); ">закрыть</button>
+        </div>
+    </div>
+</div>

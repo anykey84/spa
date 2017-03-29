@@ -1,0 +1,226 @@
+﻿<div ng-init="visibleformscanupload = false;" ng-show="visible" class="panel panel-primary">
+    <div class="panel panel-heading">Файлы</div>
+    <div class="panel-body">
+
+        <!--<div ng-show="true">
+            <p ng-model="refresh.guid" ng-change="refreshData()">fff - {{refresh.guid}}</p>
+        </div>-->
+
+        <div ng-show="processing['loadPersonFile']
+                || processing['loadFileTypes']
+                || processing['generateReport']
+                || processing['delPerson_File']">
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="Leonardo" />
+            <br />
+        </div>
+
+        <div>
+            <my-servermessages messages="messages" />
+        </div>
+
+        <div ng-show="!processing['loadPersonFile']
+                && !processing['generateReport']
+                && !processing['delPerson_File']">
+
+
+            <!--шаблоны для вкладов start-->
+            <div class="row contract-files">
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratedepositcontract">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'depositcontract'; generateReport();">
+                        Договор
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratedepositcontractprolongation">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'depositcontractprolongation'; generateReport();">
+                        ДС для пролонгации
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratedepositcontractprolongation">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'depositcontractprolongationsum'; generateReport();">
+                        ДС изменение суммы
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratecontract">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'contract'; generateReport();">
+                        Договор
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratecontractprolongation">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'contractprolongation'; generateReport();">
+                        ДС для пролонгации и ДП
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegenerategraphic">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'graphic'; generateReport();">
+                        график платежей
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratecontractguarantee">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'personinquiryguarantee'; generateReport();">
+                        Анкета поручителя
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratecontractguarantee">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'contractguarantee'; generateReport();">
+                        договор поручительства
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratecontractguaranteeadditional">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'contractguaranteeadditional'; generateReport();">
+                        ДС поручительства
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblegeneratedepositgraphic">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'depositgraphic'; generateReport();">
+                        график платежей
+                    </button>
+                </div>
+                <!--шаблоны для вкладов end-->
+
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="!isreadonly && visiblegeneratecontractpartial">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'contractpartial'; generateReport();">
+                        <span class="glyphicon glyphicon-file"></span> ДП
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="!isreadonly && visiblegeneratecontractpartialapplication">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'contractpartialapplication'; generateReport();">
+                        <span class="glyphicon glyphicon-file"></span> Заявление ДП
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="!isreadonly && visiblegeneratecontractpartialadditional">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'contractpartialadditinal'; generateReport();">
+                        <span class="glyphicon glyphicon-file"></span> ДС о дате ЧДП
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visibleletter && VisibleDebtorLetter">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'debtorletter'; generateReport();">
+                        Уведомительное письмо
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visibleregister">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'personregister'; generateReport();">
+                        Выписка из реестра
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visibleinquirykpk">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'personinquirykpk'; generateReport();">
+                        Анкета КПК
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visibleinquiryjuridicalkpk">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'inquiryjuridicalkpk'; generateReport();">
+                        Анкета кпк юр. лицо
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visibleinquiry">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'personinquiry'; generateReport();">
+                        Анкета
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3" ng-show="visiblepersonoutkpk">
+                    <button class="btn btn-primary btn-sm btn-block"
+                            ng-click="reporttype = 'personoutkpk'; generateReport();">
+                        Заявление о выходе из кпк
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-3">
+                    <button class="btn btn-success btn-sm btn-block"
+                            ng-show="visibleupload || visiblescanupload" ng-click="visibleformscanupload = !visibleformscanupload;">
+                        Загрузить скан документа
+                    </button>
+                </div>
+            </div>
+
+
+            <form ng-show="visibleformscanupload" ng-submit="upload()">
+
+                <div ng-show="visiblescanupload" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="scan"
+                               class="col-sm-2 control-label">тип скана</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selected"
+                                    ng-options="item as item.name for item in filetypes"
+                                    class="form-control" id="scan" />
+                        </div>
+                    </div>
+                </div>
+
+                <input type="file"
+                       class="form-control"
+                       multiple
+                       file-input="files">
+
+                <table class="table table-striped table-condensed table-hover">
+                    <tbody>
+                        <tr ng-repeat="file in files">
+                            <td>{{file.name}}</td>
+                            <td>
+                                <div>
+                                    <my-progressbar typebar="line"
+                                                    message="идет загрузка файла"
+                                                    visible="processing[file.name]"
+                                                    error="error[file.name]" />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <input type="submit" class="btn btn-primary btn-sm" value="Загрузить">
+            </form>
+
+
+            <table class="table table-striped table-condensed table-hover" ng-show="personfiles.length != 0">
+                <thead>
+                <th>Дата создания</th>
+                <th>Пользователь</th>
+                <th>Файл</th>
+                <th ng-show="visibledownload">&nbsp;</th>
+                <th ng-show="visibledelete">&nbsp;</th>
+                <th>Тип файла</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="y in personfiles | orderBy:'id_Person_File':true">
+                        
+                        <!--<td>{{y.id_Person_File}} + ' - ' + {{y.fileName}}</td>-->
+                        <td>{{(y.dateCreate).replace("T", " ")}}</td>
+                        <td>{{y.profileFullName}}</td>
+                        
+                        <!--<td>{{item.profileShortName}}</td>-->
+                        <td>{{y.fileDisplayName}} ({{y.fileName}})</td>
+                        <td ng-show="visibledownload">
+                            <a target="_blank" href="/File/Download/{{y.id_Person_File}}" title="Скачать"><span class="glyphicon glyphicon-save" aria-hidden="true"></span></a>
+                            <!--<button>скачать</button>-->
+                        </td>
+                        <td ng-show="visibledelete">
+                            <!--<button>удалить</button>-->
+                            <a ng-click="delPerson_File(y.id_Person_File)" title="Удалить" style="cursor: pointer"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                        </td>
+                        <td class="text-center">{{y.id_FileType}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

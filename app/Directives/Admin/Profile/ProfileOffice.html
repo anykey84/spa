@@ -1,0 +1,133 @@
+﻿<div>
+    <legend>связывание пользователей и торговых точек (ТТ)</legend>
+
+    <div ng-show="processing['loadOffices']
+               || processing['loadProfiles']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+        <br />
+    </div>
+
+    <div ng-show="!processing['loadOffices']
+               && !processing['loadProfiles']">
+
+        <table class="table borderless">
+            <thead>
+            <th>пользователи</th>
+            <th>выбранные ТТ</th>
+            <th>ТТ</th>
+            </thead>
+            <tr>
+                <td width="33%">
+                    <div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"
+                                           placeholder="введите текст для поиска"
+                                           ng-change="index = null;"
+                                           ng-model="findprofile" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table borderless">
+                            <tr ng-repeat="item in (filteredProfiles = (profiles | filter: findprofile))"
+                                ng-click="$parent.idProfile = item.id; $parent.index = $index; loadProfileOffices(item.id);"
+                                ng-class='{selected: $index == $parent.index}'>
+                                <td>{{item.profileFullName}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </td>
+
+                <td width="33%">
+
+                    <div>
+                        <div ng-show="processing['loadProfileOffices']
+                               || processing['delProfileOffice']
+                               || processing['addProfileOffice']">
+
+                            <my-progressbar message="{{message}}"
+                                            visible="true"
+                                            typebar="circle" />
+                            <br />
+                        </div>
+
+                        <div ng-show="!processing['loadProfileOffices']
+                                && !processing['delProfileOffice']
+                                && !processing['addProfileOffice']">
+
+                            <div>
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control"
+                                                   placeholder="введите текст для поиска"
+                                                   ng-model="findprofileoffice" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table borderless">
+                                    <tr ng-repeat="item in (filteredProfileoffices = (profileoffices | filter: findprofileoffice))">
+                                        <td>{{item.name}}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"
+                                                    ng-click="delProfileOffice(item)">
+                                                удалить
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+
+                <td width="33%">
+                    <div>
+                        <div ng-show="processing['addProfileOffice']">
+                            <my-progressbar message="{{message}}"
+                                            visible="true"
+                                            typebar="circle" />
+                            <br />
+                        </div>
+
+                        <div ng-show="!processing['addProfileOffice']">
+                            <div>
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control"
+                                                   placeholder="введите текст для поиска"
+                                                   ng-model="findoffice" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table borderless">
+                                    <tr ng-repeat="item in (filteredOffices = (offices | filter: findoffice))">
+                                        <td>{{item.name}}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"
+                                                    ng-click="addProfileOffice(item.id)">
+                                                добавить
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,179 @@
+﻿@*<div ng-show="contracts.length !== 0">*@
+
+<div>
+    <div>
+        <div ng-show="processing['attachPersonsProfileInWork']
+                || processing['detachPersonsProfileInWork']
+                || processing['loadProfilesInWork']
+                || processing['loadPersons']">
+
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="line" />
+            <br />
+        </div>
+
+        <div>
+            <my-servermessages messages="messages" />
+        </div>
+
+    </div>
+
+    <div ng-show="!processing['attachPersonsProfileInWork']
+           && !processing['detachPersonsProfileInWork']
+           && !processing['loadProfilesInWork']
+           && !processing['loadPersons']">
+
+
+        <div ng-show="persons.length != 0;">
+
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                <th ng-show="VisibleAttachPersonsProfileInWork">
+                    <button class="btn btn-primary btn-xs"
+                            ng-init="isSelectPersonsAll = false;"
+                            ng-click="isSelectPersonsAll = !isSelectPersonsAll; selectPersonsAll(isSelectPersonsAll);">
+                        <div ng-show="!isSelectPersonsAll">
+                            выбрать все
+                        </div>
+                        <div ng-show="isSelectPersonsAll">
+                            снять все
+                        </div>
+                    </button>
+                </th>
+                <th>дата создания</th>
+                <th>фио</th>
+                <th>ОО и дата создания</th>
+                <th>в работе ...</th>
+                <th>задача</th>
+                <th>комментарий</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in persons">
+
+                        <td width="50px" ng-show="VisibleAttachPersonsProfileInWork">
+                            <button class="btn btn-primary btn-xs" ng-click="item.isSelected = !item.isSelected;">
+                                <div ng-show="!item.isSelected">
+                                    выбрать
+                                </div>
+                                <div class="btn btn-primary btn-xs" ng-show="item.isSelected">
+                                    снять
+                                </div>
+                            </button>
+                        </td>
+
+                        <td>
+                            {{item.dateCreate | dateFormatLong}}
+                        </td>
+
+                        <td width="20%">
+                            <a href="#/Person/Info/{{item.id_Person}}">{{item.fullName}} </a> {{item.dateBirth | dateFormatShort}}
+                            @*<br />
+                                <ins>дата рождения:</ins> {{item.dateBirth | dateFormatShort}}*@
+                        </td>
+
+                        <td width="20%">
+                            {{item.officeCreate}}
+                            @*{{item.dateCreate | dateFormatLong}}
+                                <br />
+                                <ins>торговая точка:</ins>
+                                <br />
+                                {{item.officeCreate}}*@
+                        </td>
+
+                        <td width="20%">
+                            {{item.fullNameProfileInWork}} c {{item.personInWorkDateCreate | dateFormatLong}}
+                            @*<br />
+                                <div ng-show="item.personInWorkDateCreate != null">
+                                    <ins>дата создания:</ins>
+                                    <br />
+                                    {{item.personInWorkDateCreate | dateFormatLong}}
+                                </div>*@
+                        </td>
+
+                        @*<td width="50%">
+                                {{item.taskTypeName}}
+                                <br />
+                                <ins>комментарий:</ins> {{item.taskDescription}}
+                                <br />
+                                <ins>инициатор:</ins>
+                                {{item.taskUserCreate}}
+                                <br />
+                                <ins>дата создания:</ins>
+                                {{item.taskDateCreate | dateFormatLong}}
+                            </td>*@
+
+                        <td width="30%">
+                            {{item.taskTypeName}}
+                            <br />
+                            <ins>инициатор:</ins>
+                            {{item.taskUserCreate}}
+                            <br />
+                            <ins>дата создания:</ins>
+                            {{item.taskDateCreate | dateFormatLong}}
+                        </td>
+
+                        <td width="40%">{{item.taskDescription}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div class="text-left">
+                            <button class="btn btn-primary btn-sm"
+                                    ng-init="visibleFormAttach = false"
+                                    ng-show="!visibleFormAttach"
+                                    ng-click="visibleFormAttach = true;">
+                                закрепить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                    </div>
+                    <div class="col-xs-3">
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="text-right">
+                            <button class="btn btn-primary btn-sm"
+                                    ng-click="detachPersonsProfileInWork();">
+                                открепить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div ng-show="visibleFormAttach && VisibleAttachPersonsProfileInWork">
+            <br />
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">выберите сотрудника</label>
+                    <div class="col-sm-10">
+                        <select ng-model="selectedPersonProfile"
+                                ng-options="item as item.profileFullName for item in profiles | orderBy:'profileFullName'"
+                                class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">укажите комментарий</label>
+                    <div class="col-sm-10">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="введите ваш комментарий"
+                               ng-model="commentPerson" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-right">
+                <button class="btn btn-primary btn-sm" ng-click="attachPersonsProfileInWork();">сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>

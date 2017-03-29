@@ -1,0 +1,25 @@
+﻿<div class="panel panel-primary">
+
+    <div>
+        <timer interval="20000" ng-show="false" />
+    </div>
+
+    <div class="panel-heading">
+        Договоры за текущий день
+    </div>
+
+    <div class="panel-body">
+        <div ng-show="processing['loadContractsForOperator']">
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="line" />
+            <br />
+        </div>
+        <div>
+            <h3>загружено {{contracts.length}} договоров</h3>
+        </div>
+        <div>
+            <my-contracttable contracts="contracts" />
+        </div>
+    </div>
+</div>

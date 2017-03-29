@@ -1,0 +1,241 @@
+﻿<div ng-init="VisibleFormPersonPhone = false; VisibleFormContactPhone = false; showConfirmPhoneForm = false;">
+    <br />
+
+
+
+    <div ng-show="processing['saveContactPhone']
+               || processing['deleteContactPhone']
+               || processing['savePersonPhone']
+               || processing['deletePersonPhone']
+               || processing['confirmPersonPhone']
+               || processing['checkPersonPhone']
+               || processing['loadContactPhone']
+               || processing['loadPersonPhone']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+        <br />
+    </div>
+
+    <div>
+        <my-servermessages messages="messages" />
+    </div>
+
+    <legend>личные телефоны</legend>
+
+    <div ng-show="showConfirmPhoneForm">
+        <p>СМС код отправлен на номер {{currentPhone}}. введите полученный код:</p>
+        <input class="form-control" type="text" required="required" ng-model="confirmcode">
+        <button class="btn btn-primary btn-sm"
+                ng-click="showConfirmPhoneForm = confirmresult; showConfirmPhoneFormResult = true; checkPersonPhone();">
+            сохранить
+        </button>
+        <p />
+    </div>
+
+    <div ng-show="showConfirmPhoneFormResult">
+        <p>{{confirmresult}}</p>
+    </div>
+
+    <button class="btn btn-primary btn-sm"
+            ng-click="VisibleFormPersonPhone = !VisibleFormPersonPhone;"
+            ng-show="VisibleButtonAddPhone">
+        добавить
+    </button>
+
+    <form name="userForm">
+        <div ng-show="VisibleFormPersonPhone" class="form-horizontal">
+
+            <div class="form-group">
+                <label for="phone"
+                       class="col-sm-2 control-label">телефон</label>
+                <div class="col-sm-10">
+                    <input type="text"
+                           class="form-control"
+                           id="phone"
+                           required="required"
+                           ng-model="phone.phone"
+                           ng-change="checkPhoneFormat(phone, userForm)" /> <!--Вставка проверки-->
+                </div>          
+            </div>
+            
+            <div class="form-group">
+                <label for="comment"
+                       class="col-sm-2 control-label">комментарий</label>
+                <div class="col-sm-10">
+                    <input type="text"
+                           class="form-control"
+                           id="comment"
+                           required="required"                           
+                           ng-model="phone.comment">
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-sm" ng-click="savePersonPhone(phone, userForm); VisibleFormPersonPhone = !VisibleFormPersonPhone;">сохранить</button><!--Вставка проверки-->
+            <button class="btn btn-primary btn-sm" ng-click="VisibleFormPersonPhone = !VisibleFormPersonPhone;">отмена</button>
+        </div>
+    </form>
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+            <th>телефон</th>
+            <th>комментарий</th>
+            <th ng-show="VisibleButtonDeletePhone">-</th>
+            <th>-</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in personphones" ng-click="propertyPhoneChanged($index);">
+                    <td>{{item.phone}}</td>
+                    <td>{{item.comment}}</td>
+                    <td ng-show="VisibleButtonDeletePhone">
+                        <button class="btn btn-primary btn-sm" ng-show="!item.isDeleted" ng-click="deletePersonPhone(item)">удалить</button>
+                        <p ng-show="item.isDeleted">удален</p>
+                    </td>
+                    <td>
+                        <div ng-show="!item.isConfirmed">
+                            <button class="btn btn-primary btn-sm" ng-click="$parent.showConfirmPhoneForm = true; $parent.showConfirmPhoneFormResult = false; confirmPersonPhone(item); ">подтвердить</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br />
+        <br />
+
+        <legend>контактные телефоны</legend>
+
+        <button class="btn btn-primary btn-sm"
+                ng-click="VisibleFormContactPhone = !VisibleFormContactPhone;"
+                ng-show="VisibleButtonAddPhone">
+            добавить
+        </button>
+
+        <div ng-show="VisibleFormContactPhone" class="form-horizontal">
+            <div class="form-group">
+                <label for="phone2"
+                       class="col-sm-2 control-label">телефон</label>
+                <div class="col-sm-10">
+                    <input type="text"
+                           class="form-control"
+                           id="phone2"
+                           required="required"
+                           ng-model="phone.phone">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName"
+                       class="col-sm-2 control-label">фамилия</label>
+                <div class="col-sm-10">
+                    <input type="text"
+                           class="form-control"
+                           id="lastName"
+                           required="required"
+                           ng-model="phone.lastName">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="firstName"
+                       class="col-sm-2 control-label">имя</label>
+                <div class="col-sm-10">
+                    <input type="text"
+                           class="form-control"
+                           id="firstName"
+                           required="required"
+                           ng-model="phone.firstName">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="middleName"
+                       class="col-sm-2 control-label">отчество</label>
+                <div class="col-sm-10">
+                    <input type="text"
+                           class="form-control"
+                           id="middleName"
+                           required="required"
+                           ng-model="phone.middleName">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="birthDate"
+                       class="col-sm-2 control-label">дата рождения</label>
+                <div class="col-sm-10">
+                    <input type="date"
+                           class="form-control"
+                           id="birthDate"
+                           required="required"
+                           ng-model="phone.birthDate">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="sex"
+                       class="col-sm-2 control-label">пол (галочка мужской)</label>
+                <div class="col-sm-10">
+                    <input type="checkbox"
+                           class="form-control"
+                           id="sex"
+                           required="required"
+                           ng-model="phone.sex">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="comment"
+                       class="col-sm-2 control-label">комментарий</label>
+                <div class="col-sm-10">
+                    <input type="text"
+                           class="form-control"
+                           id="comment"
+                           required="required"
+                           ng-model="phone.comment">
+                </div>
+            </div>
+
+
+            <button class="btn btn-primary btn-sm" ng-click="saveContactPhone(); VisibleFormContactPhone = !VisibleFormContactPhone;">сохранить</button>
+            <button class="btn btn-primary btn-sm" ng-click="VisibleFormContactPhone = !VisibleFormContactPhone;">отмена</button>
+
+        </div>
+
+        <br />
+        <br />
+
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+            <th>телефон</th>
+            <th>фамилия</th>
+            <th>имя</th>
+            <th>отчество</th>
+            <th>дата рождения</th>
+            <th>комментарий</th>
+            <th ng-show="VisibleButtonDeletePhone">-</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in contactphones" ng-click="propertyPhoneChanged($index);">
+                    <td>{{item.phone}}</td>
+                    <td>{{item.lastName}}</td>
+                    <td>{{item.firstName}}</td>
+                    <td>{{item.middleName}}</td>
+                    <td>{{item.birthDate | date:'dd.MM.yyyy'}}</td>
+                    <td>{{item.comment}}</td>
+                    <td ng-show="VisibleButtonDeletePhone">
+                        <button class="btn btn-primary btn-sm" ng-show="!item.isDeleted" ng-click="deleteContactPhone(item)">удалить</button>
+                        <p ng-show="item.isDeleted">удален</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <br />
+        <br />
+
+        <div ng-show="VisibleTabPerson_PhoneAnalysis">
+            <my-person-phone-analysis person="person" />
+        </div>
+</div>

@@ -1,0 +1,95 @@
+﻿<div>
+    <legend>asdasdasd</legend>
+
+    <div>
+        <div ng-show="processing['getTasksByTaskType']
+             || processing['loadProfilesInWork']
+             || processing['attachPersonsInWork']
+             || processing['detachPersonsInWork']
+             || processing['loadTaskTypes']
+             || processing['loadTasks']">
+
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="line" />
+            <br />
+        </div>
+
+        <div>
+            <my-servermessages messages="messages" />
+        </div>
+    </div>
+
+
+    <div ng-show="!processing['getTasksByTaskType']
+             && !processing['loadProfilesInWork']
+             && !processing['attachPersonsInWork']
+             && !processing['detachPersonsInWork']
+             && !processing['loadTaskTypes']
+             && !processing['loadTasks']">
+
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label">выберите тип задачи</label>
+                <select ng-model="selected"
+                        class="form-control"
+                        ng-options="item as item.name for item in tasktypes"></select>
+            </div>
+        </div>
+
+        <br />
+
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+            <th>закрепить</th>
+            <th>физ. лицо</th>
+            <th>тип</th>
+            <th>дата создания</th>
+            <th>план. дата</th>
+            <th>описание задачи</th>
+            <th>инициатор  </th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in tasks">
+                    <td>
+                        <button class="btn btn-primary btn-xs" ng-click="item.isSelected = !item.isSelected;">
+                            <div ng-show="!item.isSelected">
+                                выбрать
+                            </div>
+                            <div class="btn btn-primary btn-xs" ng-show="item.isSelected">
+                                снять
+                            </div>
+                        </button>
+
+                    </td>
+                    <td>
+                        <a href="#/Person/Info/{{item.id_Person}}">{{item.personFullName}}</a>
+                    </td>
+                    <td>
+                        {{item.taskTypeName}}
+                    </td>
+                    <td>
+                        {{item.taskDateCreate | dateFormatLong}}
+                    </td>
+                    <td>
+                        {{item.taskDatePlanned}}
+                    </td>
+                    <td>
+                        {{item.taskDescription}}
+                    </td>
+
+                    <td>
+                        <ins>инициатор:</ins>
+                        <br />
+                        {{item.createFullName}}
+                        <br />
+                        <ins>в работе:</ins>
+                        <br />
+                        {{item.workerFullName}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

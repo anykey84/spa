@@ -1,0 +1,92 @@
+﻿<div ng-show="VisibleContractInWork">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Закрепление договоров
+        </div>
+        <div class="panel-body">
+            <div>
+                <div ng-show="processing['loadContractsInWork']
+             || processing['attachContractsInWork']
+             || processing['detachContractsInWork']
+             || processing['loadProfilesInWork']">
+
+                    <my-progressbar message="{{message}}"
+                                    visible="true"
+                                    typebar="line" />
+                    <br />
+                </div>
+
+                <div>
+                    <my-servermessages messages="messages" />
+                </div>
+            </div>
+
+
+            <div ng-show="!processing['loadContractsInWork']
+             && !processing['attachContractsInWork']
+             && !processing['detachContractsInWork']
+             && !processing['loadProfilesInWork']">
+                <!--<div>
+                    <h3>загружено {{contracts.length}} договоров</h3>
+                </div>-->
+
+                <p>выберите диапазон кол-ва дней просрочки или введите номер договора</p>
+
+                <div>
+                    <form class="form-inline" ng-submit="loadContractsInWork();">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>c</label>
+                                    <input type="number" class="form-control" ng-model="countFrom">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>по</label>
+                                    <input type="number" class="form-control" ng-model="countTo">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>номер займа</label>
+                                    <input type="number" class="form-control" ng-model="contractNumber">
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <input type="submit" class="btn btn-primary btn-sm"
+                               value="Сгенерировать">
+                    </form>
+
+                    <!--<div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="row">
+                                    <label class="col-xs-4 col-md-5 col-lg-5 control-label">отчетный период с</label>
+                                    <div class="col-xs-8 col-md-7 col-lg-7">
+                                        <input ng-model="dateFrom" type="date" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="row">
+                                    <label class="col-xs-4 col-md-5 col-lg-5  control-label">по</label>
+                                    <div class="col-xs-8 col-md-7 col-lg-7">
+                                        <input ng-model="dateTo" type="date" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                            </div>
+                        </div>
+                    </div>-->
+
+                </div>
+                <div>
+                    <my-contracttable contracts="contracts" isvisibleattach="true" loadcontracts="loadContractsInWork()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

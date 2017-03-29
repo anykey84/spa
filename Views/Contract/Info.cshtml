@@ -1,0 +1,74 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <a class="lead" href="#/Contract"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> назад к списку договоров</a>
+    </div>
+    <div class="col-md-6">
+        <my-alert-messages isload="true" />
+    </div>
+</div>
+<div ng-show="contract.number">
+        <h1>{{contract.owner}}</h1>
+        <h3>№ {{contract.number}} от {{((contract.dateCreate.replace('T',' ')).split('.'))[0]}}</h3> 
+        <h2><span class="label label-info">{{contract.lastStatus}}</span></h2>
+    <br />
+</div>
+
+
+
+<nav class="navbar navbar-inverse" id="person-nav">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ng-show="VisibleTabContract_LoanInfo"><a ng-click="panelId = 'loaninfo'">Сведения о займе</a></li>
+                <li ng-show="VisibleTabContract_Payment"><a ng-click="panelId = 'payment'">Платежи</a></li>
+                <li ng-show="VisibleTabContract_Status"><a ng-click="panelId = 'status'">Статусы</a></li>
+                <li ng-show="VisibleTabContract_Person"><a ng-click="panelId = 'person'">Заемщик</a></li>
+                <li ng-show="VisibleTabContract_Task"><a ng-click="panelId = 'task'">Задачи</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+
+@*<div class="slide-animate-container">
+        <div class="slide-animate" ng-include="contactInfoPanelUrl"></div>
+    </div>*@
+
+<ng-include src="contactInfoPanelUrl">
+</ng-include>
+
+<div>
+    <my-personfile idcontract="contract.id"
+                   idpersondocument="null"
+                   idpayment="null"
+                   visible="true"
+                   visibleupload="true"
+                   visibleletter="true"
+                   visiblescanupload="true"
+                   visiblegenerategrahic="true"
+                   visiblegenerategraphic="true"
+                   visiblegeneratecontract="true"
+                   visiblegeneratecontractguarantee="true"
+                   visiblegeneratecontractguaranteeadditional="true"
+                   visiblegeneratecontractprolongation="true"
+                   visiblegeneratecontractpartial="false"
+                   visiblegeneratecontractpartialadditional="true"
+                   visiblegeneratecontractpartialapplication="true"
+                   visibledelete="VisibleButtonDeleteFileContract"
+                   visibledownload="VisibleButtonDownloadFileContract"
+                   visibleupload="false" />
+</div>
+
+

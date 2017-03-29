@@ -1,0 +1,32 @@
+﻿<div>
+    <legend>Проверка на причастность к терроризму</legend>
+    <br />
+
+    <div ng-show="checkterrorist.length != 0">
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+                <!--<th>Id</th>-->
+            <th>Дата проверки</th>
+            <th>Результат проверки</th>
+            <th>Список</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in checkterrorist | orderBy:'datecheck'">
+                    <!--<td>{{item.id}}</td>-->
+
+                    <td>
+                        {{item.dateCheck}}
+                    </td>
+                    <td>
+                        {{item.checkRes}}
+                    </td>
+                    <td>
+                        {{item.xmlNum}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

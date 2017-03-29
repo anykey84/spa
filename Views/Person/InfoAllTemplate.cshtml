@@ -1,0 +1,76 @@
+﻿<div>
+
+    <div>
+        <my-person idperson="person.id" />
+    </div>
+
+    <div>
+        <my-task contract="null" person="person" />
+    </div>
+
+    <div>
+        <my-loan person="person" />
+    </div>
+
+    <div>
+        <my-personphone person="person" />
+    </div>
+
+    <div>
+        <legend>паспортные данные </legend>
+
+        <my-person-document typedoc="{ type: 'document', id: 1, idfiletype: 1 }"
+                            visibleadddocument="true"
+                            visiblefiledocument="true"
+                            visibledownloadfiledocument="true"
+                            visibleuploadfiledocument="false"
+                            visibledeletefiledocument="false" />
+    </div>
+
+    <div>
+        <legend>информация о работе</legend>
+
+        <my-person-document typedoc="{ type: 'work', id: 7, idfiletype: 38 }"
+                            visibleadddocument="true"
+                            visiblefiledocument="true"
+                            visibledownloadfiledocument="true"
+                            visibleuploadfiledocument="false"
+                            visibledeletefiledocument="false" />
+    </div>
+
+
+
+    <div>
+        <legend>фотографии</legend>
+
+        <my-person-document typedoc="{ type: 'foto', id: 20, idfiletype: 16 }"
+                            visibleadddocument="true"
+                            visiblefiledocument="true"
+                            visibledownloadfiledocument="true"
+                            visibleuploadfiledocument="false"
+                            visibledeletefiledocument="false" />
+    </div>
+
+    <div>
+        <legend>дополнительная информация</legend>
+
+        <my-person-document typedoc="{ type: panelId, id: 5, idfiletype: null }"
+                            visibleadddocument="true"
+                            visiblefiledocument="false"
+                            visibledownloadfiledocument="true"
+                            visibleuploadfiledocument="false"
+                            visibledeletefiledocument="false" />
+    </div>
+
+    <div>
+        <legend>дополнительные документы</legend>
+
+        <my-person-document typedoc="{ type: panelId, id: -1, idfiletype: null }"
+                            visibleadddocument="false"
+                            visiblefiledocument="true"
+                            visibledownloadfiledocument="true"
+                            visibleuploadfiledocument="false"
+                            visibledeletefiledocument="false" />
+    </div>
+
+</div>

@@ -1,0 +1,46 @@
+﻿<div ng-init="visibletypicalreport = false;">
+    <div>
+        <button class="btn btn-default btn-block"
+                ng-show="!visibletypicalreport"
+                ng-click="visibletypicalreport = !visibletypicalreport; visibleClick(visibletypicalreport);"><span class="glyphicon glyphicon-file"></span>&nbsp;
+            {{reportName}}
+        </button>
+
+        <div ng-show="visibletypicalreport">
+
+            <legend>{{reportName}}</legend>
+
+            <div class="form-horizontal">
+
+                <div ng-if="VisibilityElements.VisibleDateFrom"
+                     class="form-group">
+                    <label class="col-sm-2 control-label">{{(_.isNil(VisibilityElements.VisibleDateTo) || !VisibilityElements.VisibleDateTo) ? 'Дата' : 'Период с:'}}</label>
+                    <div class="col-sm-10">
+                        <input type="date"
+                               class="form-control"
+                               ng-model="dateReport.date"
+                               model-view-converter="dateToString" />
+                    </div>
+                </div>
+
+                <div ng-if="VisibilityElements.VisibleDateTo"
+                     class="form-group">
+                    <label class="col-sm-2 control-label">по: </label>
+                    <div class="col-sm-10">
+                        <input type="date"
+                               class="form-control"
+                               ng-model="dateReport.dateTo"
+                               model-view-converter="dateToString" />
+                    </div>
+                </div>
+                    
+                <button class="btn btn-primary btn-sm" ng-click="generateReport();">сгенерировать</button>
+                <ng-include src="innerUrl1"></ng-include> 
+
+            </div>
+            <br />
+
+            <button class="btn btn-primary btn-sm" ng-click="visibletypicalreport = !visibletypicalreport; visibleClick(visibletypicalreport); ">закрыть</button>
+        </div>
+    </div>
+</div>

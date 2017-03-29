@@ -1,0 +1,167 @@
+﻿<h2>Паспортные данные</h2>
+
+@*<div>
+    <my-person idperson="person.id" />
+</div>*@
+
+@*<br />*@
+
+<div>
+    <my-person-document typedoc="doc"
+                        visibleadddocument="true"
+                        visiblefiledocument="true"
+                        visibledownloadfiledocument="true"
+                        visibleuploadfiledocument="true"
+                        visibledeletefiledocument="true" />
+</div>
+
+
+
+
+
+@*<br />
+    <legend>документы</legend>
+
+
+        22
+
+
+    <h4>паспортные данные</h4>
+
+    <button ng-click="addPassport()" ng-show="addPassportVisible && addAccessPassportVisible"> добавить документ паспортные данные </button>
+
+    <br />
+    <br />
+
+    <div ng-show="formPassportVisible">
+
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+            <th>свойство</th>
+            <th>значение</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in passports" ng-click="propertyPassportChanged($index);">
+                    <td>{{item.propertyName}}</td>
+                    <td>
+                        <input type="{{item.propertyType}}" ng-model="item.propertyValue">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div ng-show="formPersonAddressVisible">
+            <h4>адрес регистрации</h4>
+            <div>
+                <div>
+                    <label>
+                        индекс
+                    </label>
+                    <input type="text" required="required" ng-model="passport.reg.postIndex">
+                </div>
+                <div>
+                    <label>
+                        страна
+                    </label>
+                    <input type="text" required="required" ng-model="passport.reg.country">
+                </div>
+                <div>
+                    <label>
+                        регион
+                    </label>
+                    <input type="text" required="required" ng-model="passport.reg.region">
+                </div>
+                <div>
+                    <label>
+                        город
+                    </label>
+                    <input type="text" required="required" ng-model="passport.reg.city">
+                </div>
+                <div>
+                    <label>
+                        улица
+                    </label>
+                    <input type="text" required="required" ng-model="passport.reg.street">
+                </div>
+                <div>
+                    <label>
+                        дом
+                    </label>
+                    <input type="text" required="required" ng-model="passport.reg.house">
+                </div>
+                <div>
+                    <label>
+                        корпус
+                    </label>
+                    <input type="text" required="required" ng-model="passport.reg.building">
+                </div>
+                <div>
+                    <label>
+                        квартира
+                    </label>
+                    <input type="text" required="required" ng-model="passport.reg.flat">
+                </div>
+            </div>
+
+            <br />
+            <button ng-click="copyAddress()">скопировать адрес регистрации в адрес проживания</button>
+            <br />
+
+            <h4>адрес проживания</h4>
+            <div>
+                <div>
+                    <label>
+                        индекс
+                    </label>
+                    <input type="text" required="required" ng-model="passport.res.postIndex">
+                </div>
+                <div>
+                    <label>
+                        страна
+                    </label>
+                    <input type="text" required="required" ng-model="passport.res.country">
+                </div>
+                <div>
+                    <label>
+                        регион
+                    </label>
+                    <input type="text" required="required" ng-model="passport.res.region">
+                </div>
+                <div>
+                    <label>
+                        город
+                    </label>
+                    <input type="text" required="required" ng-model="passport.res.city">
+                </div>
+                <div>
+                    <label>
+                        улица
+                    </label>
+                    <input type="text" required="required" ng-model="passport.res.street">
+                </div>
+                <div>
+                    <label>
+                        дом
+                    </label>
+                    <input type="text" required="required" ng-model="passport.res.house">
+                </div>
+                <div>
+                    <label>
+                        корпус
+                    </label>
+                    <input type="text" required="required" ng-model="passport.res.building">
+                </div>
+                <div>
+                    <label>
+                        квартира
+                    </label>
+                    <input type="text" required="required" ng-model="passport.res.flat">
+                </div>
+            </div>
+
+        </div>
+
+        <button ng-click="savePassport()">сохранить</button>
+
+    </div>*@

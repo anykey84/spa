@@ -1,0 +1,22 @@
+﻿
+<div>
+    <legend>кредитная история</legend>
+    <button class="btn btn-primary btn-sm"
+            ng-click="getCreditHistory()">
+        Получить кредитную историю
+    </button>
+
+    
+        <button class="btn btn-primary btn-sm"
+                ng-show="VisibleButtonGetCreditHistoryNew"
+                ng-click="getCreditHistoryNew()">
+            Получить новую кредитную историю
+        </button>
+    
+    <div ng-show="processing['getCreditHistory']">
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="line" />
+    </div>
+    <div ng-bind-html="creditHistoryResult"></div>
+</div>

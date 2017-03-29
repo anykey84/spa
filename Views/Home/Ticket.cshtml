@@ -1,0 +1,194 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <h1>Касса</h1>
+    </div>
+    <div class="col-md-6"><my-alert-messages isload="true" /></div>
+</div>
+
+<div>
+    <div ng-show="processing['loadTicket']">
+
+        <my-progressbar message="{{message}}"
+                        visible="true"
+                        typebar="Leonardo" />
+        <br />
+    </div>
+
+    <div>
+        <my-servermessages messages="messages" />
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Поиск платежных ордеров</div>
+    <div class="panel-body">
+        <form>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="idfilterNumber" class="control-label">поиск по номеру</label>
+
+                    <input type="number"
+                           class="form-control"
+                           id="idfilterNumber"
+                           ng-model="filterNumber" />
+                </div>
+                <div class="col-md-6">
+                    <label for="idfilterDateTo" class="control-label">поиск по дате</label>
+
+                    <input type="date"
+                           class="form-control"
+                           id="idfilterDateTo"
+                           ng-model="filterDateTo" />
+                </div>
+                <div class="col-md-6">
+                    <br />
+                    <button class="btn btn-primary btn-sm" ng-click="loadTicket();">Загрузить</button>
+                </div>
+            </div>
+        </form>
+
+
+        <br />
+
+        <table class="table table-striped table-condensed table-hover" ng-show="payments.length > 0">
+            <thead>
+            <th>номер</th>
+            <th>дата платежа</th>
+            <th>-</th>
+            <th>сумма</th>
+            <th>инициатор</th>
+            <th>банк</th>
+            <th>-</th>
+            <th ng-show="VisibleButtonDeletePayment">-</th>
+            <th ng-show="VisibleButtonEditPayment">-</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in payments" ng-init="isEdit = false; newDatePay = null; newSum = null;">
+                    <td>{{item.id}}</td>
+                    <td>
+                        <div>
+                            {{item.datePay | date:'dd.MM.yyyy'}}
+                        </div>
+                        <div ng-show="isEdit">
+                            <input class="form-control" type="date" ng-model="newDatePay" />
+                        </div>
+                    </td>
+                    <td>{{item.debitCredit}}</td>
+
+                    <td>
+                        <div>
+                            {{item.sum}}
+                        </div>
+                        <div ng-show="isEdit">
+                            <input class="form-control" type="number" min="0" ng-model="newSum" />
+                        </div>
+                    </td>
+
+                    <td>{{item.userCreate}}</td>
+
+                    <td>
+                        <div>
+                            {{item.bankName}}
+                        </div>
+                        <div ng-show="isEdit">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="idbank"
+                                           class="col-sm-4 control-label">выберите банк</label>
+                                    <div class="col-sm-8">
+                                        <select ng-model="item.bank"
+                                                ng-options="item as item.name for item in banks"
+                                                class="form-control" id="idbank" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+
+                    <td>
+                        <div ng-show="item.id_Person_File != null && !processing[item.id]">
+                            <a target="_blank" href="/File/Download/{{item.id_Person_File}}">скачать</a>
+                        </div>
+                        <div ng-show="item.id_Person_File == null && !processing[item.id]">
+                            <button class="btn btn-primary btn-sm" ng-click="createFilePayment(item)">создать</button>
+                        </div>
+                        <div ng-show="processing[item.id]">
+                            <my-progressbar typebar="circle" visible="processing[item.id]" />
+                        </div>
+                    </td>
+                    <td ng-show="VisibleButtonDeletePayment">
+                        <button class="btn btn-primary btn-sm" ng-click="delPayment(item.id);">удалить</button>
+                    </td>
+
+                    <td ng-show="VisibleButtonEditPayment">
+                        <button class="btn btn-primary btn-sm" ng-show="!isSave" ng-click="isSave = true; isEdit = true; editPayment(item);">редактировать</button>
+                        <div ng-show="isSave">
+                            <button class="btn btn-primary btn-sm" ng-click="isSave = false; isEdit = false; savePayment(item);">сохранить</button>
+                            <button class="btn btn-primary btn-sm" ng-click="isSave = false; isEdit = false;">отмена</button>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Отчеты по кассе</div>
+    <div class="panel-body">
+        <div class="row contract-files">
+            <div class="col-md-6">
+                <my-paymenttransfer />
+            </div>
+            <div class="col-md-6">
+                <my-paymentother />
+            </div>
+            <div class="col-md-6">
+                <my-paymentbank />
+            </div>
+            <div class="col-md-6" ng-if="VisibleButtonPaymentSalary" ng-show="VisibleButtonPaymentSalary">
+                <my-paymentsalary></my-paymentsalary>
+            </div>
+            <div class="col-md-12">
+                <my-reportfile visible="true"
+                               visibledelete="true"
+                               visibledownload="true"
+                               typereport="cash"
+                               isuser="true"
+                               idfiletype="40" />
+            </div>
+            <div class="col-md-12" ng-show="VisibleButtonCashByOfficeReport">
+                <my-reportfile visible="true"
+                               visibledelete="true"
+                               visibledownload="true"
+                               typereport="cashbyoffice"
+                               isuser="true"
+                               idfiletype="40" />
+            </div>
+            <div class="col-md-12" ng-show="VisibleButtonCashGroupOfficeReport">
+                <my-reportfile visible="true"
+                               visibledelete="true"
+                               visibledownload="true"
+                               typereport="cashgroupoffice"
+                               isuser="true"
+                               idfiletype="42" />
+            </div>
+            <div class="col-md-12" ng-if="VisibleButtonCashRests" ng-show="VisibleButtonCashRests">
+                <my-cash-rests>
+                </my-cash-rests>
+            </div>
+            <div class="col-md-12" ng-if="VisibleButtonCashRestsReport" ng-show="VisibleButtonCashRestsReport">
+                <my-reportfile visible="true"
+                               visibledelete="true"
+                               visibledownload="true"
+                               typereport="typicalreport"
+                               iduser="true"
+                               idfiletype="69" />
+            </div>
+
+        </div>
+    </div>
+</div>

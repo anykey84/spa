@@ -1,0 +1,36 @@
+﻿<div>
+    <h1>Займы</h1>
+
+    <div ng-show="processing['loadPerson']
+               || processing['addContract']
+               || processing['loadPersonContract']">
+
+        <div>
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="line" />
+        </div>
+        <br />
+    </div>
+
+    <div ng-show="!processing['loadPerson'] && !processing['loadPersonContract'] && !processing['addContract']">
+        <div>
+            <button class="btn btn-success"
+                    ng-show="VisibleButtonAddCard && !inBlackList && !processing['loadPerson']"
+                    ng-click="addContract();">
+                Добавить
+            </button>
+        </div>
+
+        <div ng-show="inBlackList">
+            <h2>клиент в черном списке</h2>
+        </div>
+
+        <br />
+
+        <div>
+            <my-contracttable contracts="contracts" />
+        </div>
+
+    </div>
+</div>

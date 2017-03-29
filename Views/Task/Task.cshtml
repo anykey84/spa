@@ -1,0 +1,221 @@
+﻿<div class="panel panel-primary">
+    <div class="panel-heading">задачи</div>
+
+    <div class="panel-body">
+        <div>
+            <div ng-show="processing['loadTasks']
+             || processing['saveTaskResult']
+             || processing['deleteTaskResult']
+             || processing['deleteTask']
+             || processing['loadTaskTypes']
+             || processing['saveTask']">
+
+                <my-progressbar message="{{message}}"
+                                visible="true"
+                                typebar="Leonardo" />
+                <br />
+            </div>
+
+            <div>
+                <my-servermessages messages="messages" />
+            </div>
+        </div>
+
+
+        <div ng-show="!processing['loadTasks']
+             && !processing['saveTaskResult']
+             && !processing['deleteTaskResult']
+             && !processing['deleteTask']
+             && !processing['loadTaskTypes']
+             && !processing['saveTask']">
+            <button ng-show="VisibleButtonAddTask"
+                    class="btn btn-primary btn-sm"
+                    ng-init="isNewTask = false;"
+                    ng-click="isNewTask = !isNewTask">
+                добавить задачу
+            </button>
+
+            <div ng-show="isNewTask" class="form-horizontal">
+
+
+                <div class="form-group">
+                    <label for="selectTypeTask"
+                           class="col-sm-2 control-label">тип задачи</label>
+                    <div class="col-sm-10">
+                        <select ng-model="task.taskTypeSelected"
+                                ng-options="item as item.name for item in tasktypes"
+                                ng-change="taskTypeChanged()"
+                                class="form-control" id="selectTypeTask" />
+                    </div>
+                </div>
+                @*datepicker-popup="yyyy-MM-dd"*@
+
+                <div ng-show="visibleregion" class="form-group">
+                    <label for="selectRegion"
+                           class="col-sm-2 control-label">регион назначения консультации</label>
+                    <div class="col-sm-10">
+                        <select ng-model="task.regionSelected"
+                                ng-init="task.regionSelected = null"
+                                ng-change="task.idRegion = task.regionSelected.id"
+                                ng-options="item as item.name for item in regions"
+                                class="form-control" />
+                    </div>
+                </div>
+
+                <div ng-show="visibleregion" class="form-group">
+                    <label class="col-sm-2 control-label">услуга</label>
+                    <div class="col-sm-10">
+                        <select ng-model="task.selectProductService"
+                                ng-init="task.selectProductService = null"
+                                ng-change="task.idProductService = task.selectProductService.id"
+                                ng-options="item as item.name for item in productservices"
+                                class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">планируемая дата выполнения через (кол-во дней)</label>
+                    <div class="col-sm-10">
+                        <input type="number"
+                               class="form-control"
+                               ng-readonly="task.taskTypeSelected.isReadOnlyDayPlan"
+                               ng-model="task.taskTypeSelected.dateDayPlan"
+                               min="minDate"
+                               max="maxDate" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputDescription" class="col-sm-2 control-label">описание задачи</label>
+                    <div class="col-sm-10">
+                        <input type="text"
+                               class="form-control"
+                               id="inputDescription"
+                               placeholder="введите ваш комментарий"
+                               ng-model="task.description" />
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-sm" ng-click="saveTask();">сохранить</button>
+                <button class="btn btn-primary btn-sm" ng-click="isNewTask = !isNewTask; initTask();">отмена</button>
+            </div>
+
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                <th>Тип</th>
+                <th>Дата создания</th>
+                <th>Инициатор  </th>
+                <th>Торговая точка</th>
+                <th>Описание задачи</th>
+                <th>Результат</th>
+                <th>&nbsp;</th>
+                </thead>
+                <tbody ng-repeat="item in tasks">
+                    <tr ng-init="item.isSelected = false; item.isNew = false;">
+                        <td>{{item.task.taskTypeName}}</td>
+                        <td>
+                            <ins>дата создания:</ins>
+                            <br />
+                            {{item.task.dateCreate | dateFormatLong}}
+                            <br />
+                            <ins>план. дата:</ins>
+                            <br />
+                            {{item.task.datePlanned | dateFormatLong}}
+                        </td>
+                        <td>
+                            <ins>инициатор:</ins>
+                            <br />
+                            {{item.task.userCreateShortName}}
+                            <br />
+                            <ins>в работу:</ins>
+                            <br />
+                            {{item.task.userWorkerShortName}}
+                        </td>
+                        <td>{{item.task.officeName}}</td>
+                        <td>{{item.task.description}}</td>
+                        <td><button class="btn btn-primary btn-sm" ng-click="item.isSelected = !item.isSelected; loadTaskResults(item);" title="Результаты">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            </button></td>
+                        <td><button class="btn btn-danger btn-sm" ng-click="deleteTask(item.task.id_Task);" title="Удалить">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr ng-show="processing[item.task.id_Task]">
+                        <td colspan="8">
+                            <div ng-show="processing[item.task.id_Task]">
+                                <my-progressbar message="{{message}}"
+                                                visible="true"
+                                                typebar="line" />
+                                <br />
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr ng-show="item.isSelected">
+                        <td colspan="2">
+                            <h6>
+                                <ins>результаты:</ins>:
+                            </h6>
+                        </td>
+                        <td colspan="2">
+                            <button ng-show="VisibleButtonAddTaskResult"
+                                    class="btn btn-primary btn-block btn-sm"
+                                    ng-click="item.isNew = !item.isNew">
+                                добавить результат
+                            </button>
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+
+                    <tr ng-show="item.isNew">
+                        <td> </td>
+                        <td>текущая дата</td>
+                        <td> </td>
+                        <td>текущий пользователь</td>
+                        <td> </td>
+                        <td>
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="введите ваш комментарий"
+                                   ng-model="item.newComment" />
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-block btn-sm"
+                                    ng-click="item.isNew = !item.isNew; saveTaskResult(item); item.newComment = ''">
+                                сохранить
+                            </button>
+                            <br />
+                            <button class="btn btn-primary btn-block btn-sm"
+                                    ng-click="item.isNew = !item.isNew; item.newComment = ''">
+                                отмена
+                            </button>
+                        </td>
+                        <td> </td>
+                    </tr>
+
+                    <tr ng-show="item.isSelected" ng-repeat="y in item.taskresults">
+                        <td> </td>
+                        <td>{{y.dateCreate | dateFormatLong}}</td>
+                        <td> </td>
+                        <td>{{y.userCreateShortName}}</td>
+                        <td> </td>
+                        <td>{{y.comment}}</td>
+                        <td> </td>
+                        <td>
+                            <button class="btn btn-primary btn-block btn-xs" ng-click="deleteTaskResult(item, y.id_TaskResult);" title="Удалить">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-show="item.isSelected">
+                        <td colspan="8"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,70 @@
+﻿
+
+<div class="row">
+    <div class="col-md-6">
+        <a class="lead" href="#/Person"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> назад к реестру</a>
+    </div>
+    <div class="col-md-6">
+        <my-alert-messages isload="true" />
+    </div>
+</div>
+
+@*<legend>информация по физическому лицу</legend>*@
+
+<br />
+
+<div>
+    <my-person idperson="person.id" personinfo="personinfo" refresh="refreshPersonInfo();" />
+</div>
+
+<nav class="navbar navbar-inverse" id="person-nav">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ng-show="VisibleTabPerson_Loan"><a ng-click="panelId = 'loan'">Займы</a></li>
+                <li ng-show="VisibleTabPerson_Loan"><a ng-click="panelId = 'deposit'">Вклады</a></li>
+                <li ng-show="VisibleTabPerson_KPK"><a ng-click="panelId = 'kpk'">КПК</a></li>
+                <li ng-show="VisibleTabPerson_Questionnaire"><a ng-click="panelId = 'questionnaire'">Анкета</a></li>
+                <li ng-show="VisibleTabPerson_Passport"><a ng-click="panelId = 'document'">Паспорт</a></li>
+                <li ng-show="VisibleTabPerson_Task"><a ng-click="panelId = 'task'">Задачи</a></li>
+                <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+                    <a href id="simple-dropdown" uib-dropdown-toggle>
+                        Информация о клиенте <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+                        <li ng-show="VisibleTabPerson_PersonAllInfo"><a ng-click="panelId = 'personallinfo'">Полная информация о клиенте</a></li>
+                        <li ng-show="VisibleTabPerson_Phone"><a ng-click="panelId = 'phone'">Телефоны</a></li>
+                        <li ng-show="VisibleTabPerson_Foto"><a ng-click="panelId = 'foto'">Фото</a></li>
+                        <li ng-show="VisibleTabPerson_Work"><a ng-click="panelId = 'work'">Работа</a></li>
+                        <li ng-show="VisibleTabPerson_MaterialStatus"><a ng-click="panelId = 'materialstatus'">Имущественное положение</a></li>
+                        <li ng-show="VisibleTabPerson_AdditionalInfo"><a ng-click="panelId = 'additionalinfo'">Дополнительная информация</a></li>
+                        <li ng-show="VisibleTabPerson_AdditionalDoc"><a ng-click="panelId = 'additionaldoc'">Дополнительные документы</a></li>
+                        <li ng-show="VisibleTabPerson_Bank"><a ng-click="panelId = 'bank'">Банковский счет</a></li>
+                        
+                        <li ng-show="VisibleTabPerson_CreditHistory"><a ng-click="panelId = 'credithistory'">Кредитная история</a></li>
+                        <li class="divider"></li>
+                        <li ng-show="VisibleTabPerson_Passport"><a ng-click="panelId = 'checkTerroristsList'">Перечень террористов</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+
+
+<ng-include src="contactInfoPanelUrl">
+</ng-include>
+

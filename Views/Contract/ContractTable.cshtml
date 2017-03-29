@@ -1,0 +1,151 @@
+﻿<div>
+    <div>
+        <div ng-show="processing['attachContractsProfileInWork']
+                || processing['detachContractsProfileInWork']
+                || processing['loadProfilesInWork']
+                || processing['loadContracts']">
+
+            <my-progressbar message="{{message}}"
+                            visible="true"
+                            typebar="Leonardo" />
+            <br />
+        </div>
+
+        <div>
+            <my-servermessages messages="messages" />
+        </div>
+
+    </div>
+
+    <div ng-show="!processing['attachContractsProfileInWork']
+           && !processing['detachContractsProfileInWork']
+           && !processing['loadProfilesInWork']
+           && !processing['loadContracts']">
+
+        <div ng-show="contracts.length">
+            <button class="btn-info btn-xs" ng-init="isvisible = true;" ng-click="isvisible = !isvisible;">свернуть список</button>
+            <br />
+            <br />
+            <div ng-show="isvisible">
+                <input ng-model="findtext" type="text" class="form-control" placeholder="введите данные для поиска" />
+                <table ng-show="contracts.length != 0" class="table">
+                    <thead>
+                    <th ng-show="VisibleAttachContractsProfileInWork">
+                        <button class="btn btn-primary btn-xs btn-block"
+                                ng-init="isSelectContractsAll = false;"
+                                ng-click="isSelectContractsAll = !isSelectContractsAll; selectContractsAll(isSelectContractsAll);">
+                            <div ng-show="!isSelectContractsAll">
+                                выбрать все
+                            </div>
+                            <div ng-show="isSelectContractsAll">
+                                снять все
+                            </div>
+                        </button>
+                    </th>
+                    <th>договор</th>
+                    <th>дата создания</th>
+                    <th>торговая точка</th>
+                    <th>статус</th>
+                    <th>просрочка (дн.)</th>
+                    <th>срок (дн.)</th>
+                    <th>владелец</th>
+                    @*<th>-</th>*@
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in contracts">
+
+                            <td ng-show="VisibleAttachContractsProfileInWork">
+                                <button class="btn btn-primary btn-xs btn-block" ng-click="item.isSelected = !item.isSelected;">
+                                    <div ng-show="!item.isSelected">
+                                        выбрать
+                                    </div>
+                                    <div class="btn btn-primary btn-xs" ng-show="item.isSelected">
+                                        снять
+                                    </div>
+                                </button>
+                            </td>
+
+                            <td>
+                                <div>
+                                    <a ng-show="item.id_ContractType == 2" href="#/Contract/Info/{{item.id}}">{{item.number}}</a>
+                                    <a ng-show="item.id_ContractType == 4" href="#/Deposit/Info/{{item.id}}">{{item.number}}</a>
+                                    <br />
+                                    {{item.productName}}
+                                </div>
+                            </td>
+                            <td>{{(item.dateCreate).replace('T', ' ')}}</td>
+                            <td>{{item.officeName}}</td>
+                            <td>{{item.lastStatus}}</td>
+                            <td>{{item.overdueDaysCount}}</td>
+                            <td>{{item.contractTime}}</td>
+                            <td>
+                                <a href="#/Person/Info/{{item.id_OwnerPerson}}">{{item.owner}}</a>
+                            </td>
+                            @*<td>
+                                    <a href="#/Contract/Info/{{item.id}}">ОТКРЫТЬ</a>
+                                </td>*@
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container-fluid" ng-show="VisibleAttachContractsProfileInWork">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div class="text-left">
+                            <button class="btn btn-primary btn-sm"
+                                    ng-init="visibleFormAttach = false"
+                                    ng-show="!visibleFormAttach"
+                                    ng-click="visibleFormAttach = true;">
+                                закрепить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                    </div>
+                    <div class="col-xs-3">
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="text-right">
+                            <button class="btn btn-primary btn-sm"
+                                    ng-click="detachContractsProfileInWork();">
+                                открепить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div ng-show="visibleFormAttach && VisibleAttachContractsProfileInWork">
+                <br />
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">выберите сотрудника</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selectedContractProfile"
+                                    ng-options="item as item.profileFullName for item in profiles | orderBy:'profileFullName'"
+                                    class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">укажите комментарий</label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="введите ваш комментарий"
+                                   ng-model="commentContract" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <button class="btn btn-primary btn-sm" ng-click="attachContractsProfileInWork();">сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
